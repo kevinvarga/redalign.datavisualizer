@@ -1,22 +1,22 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+const initialState = {
+    allValues: [],
+    YValues: [],
+    ZValues: [],
+    selectedY: {pump: [], motor: []},
+    selectedZ: {pump: [], motor: []},
+    minXYZ: {x:0,y:0,z:0},
+    maxXYZ: {x:0,y:0,z:0},
+    selectedDataType: "pump",
+    isSurfaceCorrected:  false
+}
+
 export const LaserDataSlice = createSlice({
     name:'laserData',
-    initialState: {
-        allValues: [],
-        YValues: [],
-        ZValues: [],
-        selectedY: {pump: [], motor: []},
-        selectedZ: {pump: [], motor: []},
-        minXYZ: {x:0,y:0,z:0},
-        maxXYZ: {x:0,y:0,z:0},
-        selectedDataType: "pump",
-        isSurfaceCorrected:  false
-    },
+    initialState,
     reducers: {
         loadData: (state, action) => {
-            state.YValues = [];
-            state.ZValues = [];
             state.allValues = action.payload.rawData;
             let surfaceCorr = action.payload.surfaceCorrection;
             state.isSurfaceCorrected = (surfaceCorr !== null);
@@ -59,16 +59,7 @@ export const LaserDataSlice = createSlice({
             console.log(state.selectedDataType);
             console.log(state);
         },
-        resetData: (state, action) => {
-            state.allValues = [];
-            state.YValues = [];
-            state.ZValues = [];
-            state.selectedY = {pump: [], motor: []};
-            state.selectedZ = {pump: [], motor: []};
-            state.minXYZ = {x:0,y:0,z:0};
-            state.maxXYZ = {x:0,y:0,z:0};
-            state.selectedDataType = "pump";
-        }
+        resetData: (state, action) => initialState,
     }
 })
 

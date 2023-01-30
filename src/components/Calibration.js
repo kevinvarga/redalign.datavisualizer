@@ -25,9 +25,9 @@ export default function Calibration() {
     return(
          <Chip avatar={ 
             (corrections.length > 0) ?
-            <CheckCircle  /> :
-            <CancelIcon />
-            } 
+            <CheckCircle style={{color: '#4caf50'}} /> :
+            <CancelIcon style={{color: '#f55a4e'}} />
+            }
             label="Surface Correction" 
             variant="outlined" 
         />
