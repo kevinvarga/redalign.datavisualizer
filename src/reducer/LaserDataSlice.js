@@ -10,15 +10,26 @@ export const LaserDataSlice = createSlice({
         selectedZ: {pump: [], motor: []},
         minXYZ: {x:0,y:0,z:0},
         maxXYZ: {x:0,y:0,z:0},
-        selectedDataType: "pump"
+        selectedDataType: "pump",
+        isSurfaceCorrected:  false
     },
     reducers: {
         loadData: (state, action) => {
             state.YValues = [];
             state.ZValues = [];
             state.allValues = action.payload.rawData;
+            let surfaceCorr = action.payload.surfaceCorrection;
+            state.isSurfaceCorrected = (surfaceCorr !== null);
             for(let i=0;i< action.payload.rawData.length;i++){
                 let data = action.payload.rawData[i];
+                // apply surface correction
+                if(surfaceCorr !== null) {
+                    let correction = surfaceCorr.find((val) => (val.x === data.x));
+                    if(correction !== null){
+                        data.y += correction.yCorr;
+                        data.z += correction.zCorr;
+                    }
+                }
                 state.YValues.push({x:data.x,y:data.y,r:data.radius, index: i});
                 state.ZValues.push({x:data.x,y:data.z,r:data.radius, index: i});
 

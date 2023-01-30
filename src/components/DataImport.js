@@ -1,10 +1,12 @@
-import { Box, Button } from '@mui/material';
+import { Box, Button, Grid } from '@mui/material';
 import React, { useState } from 'react'
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { loadData } from '../reducer/LaserDataSlice.js';
+import Calibration from './Calibration.js';
 
 
-export default function FileInput(props) {
+export default function DataImport(props) {
+    const corrections = useSelector((state) => state.surfaceCorrection.corrections);
     const [fileName, setFileName] = useState("");
     const [loadDisabled, setLoadDisabled] = useState(false);
     const onFileSelected = props.onFileSelected;
@@ -24,10 +26,9 @@ export default function FileInput(props) {
           if(line[1] !== '') {
             data.push({x:Number(line[0]),y:Number(line[1]),z:Number(line[2]),r:Number(line[3])});
           }
-
         }
 
-        dispatch(loadData({rawData:data}));
+        dispatch(loadData({rawData:data, surfaceCorrection:corrections}));
         if(onLoaded){
             onLoaded();
         }
@@ -53,8 +54,14 @@ export default function FileInput(props) {
       };
 
     return (
-        <Box sx={{padding: '3px',width:'100%', position: 'relative'}} >
-            <Box component="span" sx={{width:'50%'}} >
+        <Grid container
+            direction="row"
+            justifyContent="space-evenly"
+            alignItems="flex-start"
+            justifyItems="center"
+            sx={{padding: "3px"}}
+        >
+            <Box >
                 <Button
                     variant="contained"
                     component="label"
@@ -71,13 +78,16 @@ export default function FileInput(props) {
                 </Button>
                 <Box component="span" sx={{padding:'5px'}} >{fileName}</Box>
             </Box>
-            <Box component="span" sx={{width:'25vw',textAlign:'right'}}>
+            <Box >
+                <Calibration />
+            </Box>
+            <Box >
                 <Button 
                     variant="contained"
                     onClick={handleUnload}>
                         Unload
                 </Button>
             </Box>
-        </Box>
+        </Grid>
     );
 }

@@ -1,18 +1,16 @@
 import { Box, FormControl, FormHelperText, Grid, MenuItem, Select } from '@mui/material';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import './App.css';
-import BestFitLineCard from './components/calculations/BestFitLineCard';
 import FourPointCard from './components/calculations/FourPointCard';
-import FileInput from './components/FileInput';
+import DataImport from './components/DataImport';
 import DataVisualizer from './components/graphs/DataVisualizer';
 import { resetData, setDataRange, setSelectedDataType } from './reducer/LaserDataSlice';
+import './App.css';
 
 function App() {
   const [reset, setReset] = useState(false);
   const laserData = useSelector((state) => state.laserData);
   const dispatch = useDispatch();
-
 
   const onFileSelected = () => {
     setReset(false);
@@ -37,7 +35,7 @@ function App() {
   return (
     <Box sx={{ width: "100vw", height: "100vh", justifyContent: 'center',  textAlign: 'center', display:'flex' }}>
       <Box>
-        <FileInput
+        <DataImport
           onFileSelected={onFileSelected}
           onLoaded={onFileInputLoaded} 
           onUnload={onUnload}
@@ -64,7 +62,6 @@ function App() {
                     direction="row"
                     >
                     <FourPointCard />
-                    <BestFitLineCard />
                   </Grid>
               </Grid>
             </Box>
