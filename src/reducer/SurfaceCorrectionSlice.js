@@ -25,8 +25,8 @@ export const SurfaceCorrectionSlice = createSlice({
                 }
 
                 // calculate median for y and z
-                let yMedian = roundToX(median(y),0);
-                let zMedian = roundToX(median(z),0);
+                let yMedian = median(y);
+                let zMedian = median(z);
                 
                 data.push({
                     x:x,
@@ -36,13 +36,19 @@ export const SurfaceCorrectionSlice = createSlice({
             }
 
             let lastPoint = data.length - 1;
-            let yStep = roundToX((data[lastPoint].yMedian - data[0].yMedian)/(data[lastPoint].x - data[0].x),6);
-            let zStep = roundToX((data[lastPoint].zMedian - data[0].zMedian)/(data[lastPoint].x - data[0].x),6);
+            let yStep = (data[lastPoint].yMedian - data[0].yMedian)/(data[lastPoint].x - data[0].x);
+            let zStep = (data[lastPoint].zMedian - data[0].zMedian)/(data[lastPoint].x - data[0].x);
             
             let tempCorrections = [];
             for(let i=0;i<data.length;i++) {
-                let yLinear = roundToX(data[0].yMedian + (data[i].x * yStep), 0);
-                let zLinear = roundToX(data[0].zMedian + (data[i].x * zStep), 0); 
+                let yLinear = data[0].yMedian + (data[i].x * yStep);
+                let zLinear = data[0].zMedian + (data[i].x * zStep); 
+                /*
+                if(data[i].x === 496000){
+                    console.log(`yMedian: ${data[i].yMedian}; yLinear: ${yLinear}; zMedian: ${data[i].zMedian}; zLinear: ${zLinear}`);
+                }
+                */
+
                 tempCorrections.push({
                     x:data[i].x,
                     //yMedian: data[i].yMedian,
@@ -53,6 +59,15 @@ export const SurfaceCorrectionSlice = createSlice({
                     zCorr:roundToX(zLinear - data[i].zMedian, 0)
                 })
             }
+
+            /*
+            let output = "";
+            for(let i=0;i<tempCorrections.length;i++){
+                output += `${tempCorrections[i].x}\t${tempCorrections[i].yCorr}\t${tempCorrections[i].zCorr}\n`;
+            }
+            console.log(output);
+            */
+           console.log(tempCorrections);
             state.corrections = tempCorrections
         }
     }

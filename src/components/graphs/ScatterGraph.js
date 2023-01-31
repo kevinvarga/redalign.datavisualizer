@@ -17,7 +17,8 @@ export default function ScatterGraph(props) {
     contentId.current = content.id;
 
     useEffect(() => {
-
+        console.log("scatterGraph.useEffect");
+        console.log(data);
         if(!contentId.current && !scatterChart.current) {
             scatterChart.current = new Chart(content.ref.current, options);
             contentId.current = content.id;
@@ -43,8 +44,6 @@ export default function ScatterGraph(props) {
             }
         }
     }, [data, min, max, reset, content, options, scatterChart]);
-
-
 
     return (
         <>

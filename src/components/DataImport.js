@@ -8,7 +8,6 @@ import Calibration from './Calibration.js';
 export default function DataImport(props) {
     const corrections = useSelector((state) => state.surfaceCorrection.corrections);
     const [fileName, setFileName] = useState("");
-    const [loadDisabled, setLoadDisabled] = useState(false);
     const onFileSelected = props.onFileSelected;
     const onLoaded = props.onLoaded;
     const onUnload = props.onUnload;
@@ -36,7 +35,6 @@ export default function DataImport(props) {
 
     const handleUnload = () => {
         setFileName("");
-        setLoadDisabled(false);
         if(onUnload) {
             onUnload();
         }
@@ -47,11 +45,10 @@ export default function DataImport(props) {
         fileReader = new FileReader();
         fileReader.onloadend = handleFileRead;
         fileReader.readAsText(file);
-        setLoadDisabled(true);
         if(onFileSelected) {
             onFileSelected();
         }
-      };
+    };
 
     return (
         <Grid container
@@ -65,7 +62,7 @@ export default function DataImport(props) {
                 <Button
                     variant="contained"
                     component="label"
-                    disabled={loadDisabled}
+                    
                 >
                     Load Data File
                     <input
@@ -81,10 +78,11 @@ export default function DataImport(props) {
             <Box >
                 <Calibration />
             </Box>
-            <Box >
+            <Box sx={{visibility:"hidden"}} >
                 <Button 
                     variant="contained"
-                    onClick={handleUnload}>
+                    onClick={handleUnload}
+                >
                         Unload
                 </Button>
             </Box>

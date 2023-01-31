@@ -9,7 +9,7 @@ const initialState = {
     minXYZ: {x:0,y:0,z:0},
     maxXYZ: {x:0,y:0,z:0},
     selectedDataType: "pump",
-    isSurfaceCorrected:  false
+    isSurfaceCorrected: false
 }
 
 export const LaserDataSlice = createSlice({
@@ -17,9 +17,12 @@ export const LaserDataSlice = createSlice({
     initialState,
     reducers: {
         loadData: (state, action) => {
-            state.allValues = action.payload.rawData;
+            let tempState = JSON.parse(JSON.stringify(initialState));
+            tempState.allValues = action.payload.rawData;
+            tempState.selectedY = {pump: [], motor: []};
+            tempState.selectedZ = {pump: [], motor: []};
             let surfaceCorr = action.payload.surfaceCorrection;
-            state.isSurfaceCorrected = (surfaceCorr !== null);
+            tempState.isSurfaceCorrected = (surfaceCorr !== null);
             for(let i=0;i< action.payload.rawData.length;i++){
                 let data = action.payload.rawData[i];
                 // apply surface correction
@@ -30,17 +33,20 @@ export const LaserDataSlice = createSlice({
                         data.z += correction.zCorr;
                     }
                 }
-                state.YValues.push({x:data.x,y:data.y,r:data.radius, index: i});
-                state.ZValues.push({x:data.x,y:data.z,r:data.radius, index: i});
-
-                state.minXYZ.x = (state.minXYZ.x === 0) ? data.x : state.minXYZ.x;
-                state.minXYZ.y = (state.minXYZ.y > data.y) ? data.y : state.minXYZ.y;
-                state.minXYZ.z = (state.minXYZ.z > data.z) ? data.z : state.minXYZ.z;
                 
-                state.maxXYZ.x = (state.maxXYZ.x < data.x) ? data.x : state.maxXYZ.x;
-                state.maxXYZ.y = (state.maxXYZ.y < data.y ) ? data.y : state.maxXYZ.y;
-                state.maxXYZ.z = (state.maxXYZ.z < data.z ) ? data.z : state.maxXYZ.z;
+                tempState.YValues.push({x:data.x,y:data.y,r:data.radius, index: i});
+                tempState.ZValues.push({x:data.x,y:data.z,r:data.radius, index: i});
+
+                tempState.minXYZ.x = (tempState.minXYZ.x === 0) ? data.x : tempState.minXYZ.x;
+                tempState.minXYZ.y = (tempState.minXYZ.y > data.y) ? data.y : tempState.minXYZ.y;
+                tempState.minXYZ.z = (tempState.minXYZ.z > data.z) ? data.z : tempState.minXYZ.z;
+                
+                tempState.maxXYZ.x = (tempState.maxXYZ.x < data.x) ? data.x : tempState.maxXYZ.x;
+                tempState.maxXYZ.y = (tempState.maxXYZ.y < data.y ) ? data.y : tempState.maxXYZ.y;
+                tempState.maxXYZ.z = (tempState.maxXYZ.z < data.z ) ? data.z : tempState.maxXYZ.z;
             }
+
+            return tempState;
         },
         setDataRange: (state, action) => {
             state.selectedY[state.selectedDataType] = [];
@@ -54,10 +60,7 @@ export const LaserDataSlice = createSlice({
             }
         },
         setSelectedDataType: (state, action) => {
-            console.log(action.payload.dataType);
             state.selectedDataType = action.payload.dataType;
-            console.log(state.selectedDataType);
-            console.log(state);
         },
         resetData: (state, action) => initialState,
     }

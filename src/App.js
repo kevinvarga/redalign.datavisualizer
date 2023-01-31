@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import FourPointCard from './components/calculations/FourPointCard';
 import DataImport from './components/DataImport';
 import DataVisualizer from './components/graphs/DataVisualizer';
-import { resetData, setDataRange, setSelectedDataType } from './reducer/LaserDataSlice';
+import { setDataRange, setSelectedDataType } from './reducer/LaserDataSlice';
 import './App.css';
 
 function App() {
@@ -13,15 +13,16 @@ function App() {
   const dispatch = useDispatch();
 
   const onFileSelected = () => {
-    setReset(false);
+    //dispatch(resetData());
+    setReset(true);
   }
 
   const onUnload = () => {
     setReset(true);
-    dispatch(resetData());
   }
 
   const onFileInputLoaded = (data) => {
+    setReset(false);
   }
 
   const onRangeUpdated = (start, end) => {
