@@ -14,16 +14,17 @@ export default function FourPointGraph(props) {
     const canvasRefMotorZ = useRef();
     const laserData = useSelector((state) => state.laserData);
     const dispatch = useDispatch();
-    const [loading, setLoading] = useState(false);
+    const [refresh, setRefresh] = useState(true);
 
     points = laserData.calculation.fourpoint; 
 
     useEffect(() => {
-        if(loading) {
-            points = laserData.calculation.fourpoint;
-            setLoading(false);
+        if(refresh) {
+            window.setTimeout(() => {
+                setRefresh(false);
+            }, 100);
         }
-    }, [loading, laserData]);
+    }, [refresh])
 
     const isSelectedPoint = (ctx) => {
         const index = ctx.dataIndex;
@@ -60,7 +61,6 @@ export default function FourPointGraph(props) {
             let tempPoints = JSON.parse(JSON.stringify(points));
             tempPoints[dataType][editPoint] = elements[0].index;
             dispatch(setCalculationValues({calculation:"fourpoint", values: tempPoints }));
-            setLoading(true);
         }
     }
 
@@ -124,96 +124,101 @@ export default function FourPointGraph(props) {
 
     return (
         <Box>
-            <Grid
-                container
-                direction="row"
-            >
-                <Box className="fp-chart-container" >
-                    <ScatterGraph 
-                        data={[laserData.rangeY.pump]}
-                        content={
-                        <canvas 
-                            id="pumpY" 
-                            ref={canvasRefPumpY} 
-                            className="graph-canvas"
-                            data-type="pump"
-                        />}
-                        refresh={loading}
-                        options={graphOptions("Pump Y")}
-                    />
-                </Box>
-                <Box className="fp-chart-container" >
-                    <ScatterGraph 
-                        data={[laserData.rangeY.motor]}
-                        content={
-                        <canvas 
-                            id="motorY" 
-                            ref={canvasRefMotorY} 
-                            className="graph-canvas"
-                            data-type="motor"
-                        />}
-                        options={graphOptions("Motor Y")}
-                    />
-                </Box>
-            </Grid>
-            <Grid
-                container
-                direction="row"
-            >
-                <Box className="fp-chart-container" >
-                    <ScatterGraph 
-                        data={[laserData.rangeZ.pump]}
-                        content={
-                        <canvas 
-                            id="pumpZ" 
-                            ref={canvasRefPumpZ} 
-                            className="graph-canvas"
-                            data-type="pump"
-                        />}
-                        options={graphOptions("Pump Z")}
-                    />
-                </Box>
-                <Box className="fp-chart-container" >
-                    <ScatterGraph 
-                        data={[laserData.rangeZ.motor]}
-                        content={
-                        <canvas 
-                            id="motorZ" 
-                            ref={canvasRefMotorZ} 
-                            className="graph-canvas"
-                            data-type="motor"
-                        />}
-                        options={graphOptions("Motor Z")}
-                    />
-                </Box>
-            </Grid>
-            <Grid 
-                container
-                direction="row"
-            >
-                <Box className="fp-togglebutton-container">
-                    <ToggleButtonGroup
-                    color="primary"
-                    value={points.edit.pump}
-                    exclusive
-                    onChange={handlePumpToggle}
-                >
-                        <ToggleButton value="start">Pump 1</ToggleButton>
-                        <ToggleButton value="end">Pump 2</ToggleButton>
-                    </ToggleButtonGroup>
-                </Box>
-                <Box className="fp-togglebutton-container">
-                    <ToggleButtonGroup
-                    color="primary"
-                    value={points.edit.motor}
-                    exclusive
-                    onChange={handleMotorToggle}
-                >
-                        <ToggleButton value="start">Motor 1</ToggleButton>
-                        <ToggleButton value="end">Motor 2</ToggleButton>
-                    </ToggleButtonGroup>
-                </Box>
-            </Grid>
+            {(refresh) ? 
+            (<><label>loading...</label></>):
+            (
+                <>
+                    <Grid
+                        container
+                        direction="row"
+                    >
+                        <Box className="fp-chart-container" >
+                            <ScatterGraph 
+                                data={[laserData.rangeY.pump]}
+                                content={
+                                <canvas 
+                                    id="pumpY" 
+                                    ref={canvasRefPumpY} 
+                                    className="graph-canvas"
+                                    data-type="pump"
+                                />}
+                                options={graphOptions("Pump Y")}
+                            />
+                        </Box>
+                        <Box className="fp-chart-container" >
+                            <ScatterGraph 
+                                data={[laserData.rangeY.motor]}
+                                content={
+                                <canvas 
+                                    id="motorY" 
+                                    ref={canvasRefMotorY} 
+                                    className="graph-canvas"
+                                    data-type="motor"
+                                />}
+                                options={graphOptions("Motor Y")}
+                            />
+                        </Box>
+                    </Grid>
+                    <Grid
+                        container
+                        direction="row"
+                    >
+                        <Box className="fp-chart-container" >
+                            <ScatterGraph 
+                                data={[laserData.rangeZ.pump]}
+                                content={
+                                <canvas 
+                                    id="pumpZ" 
+                                    ref={canvasRefPumpZ} 
+                                    className="graph-canvas"
+                                    data-type="pump"
+                                />}
+                                options={graphOptions("Pump Z")}
+                            />
+                        </Box>
+                        <Box className="fp-chart-container" >
+                            <ScatterGraph 
+                                data={[laserData.rangeZ.motor]}
+                                content={
+                                <canvas 
+                                    id="motorZ" 
+                                    ref={canvasRefMotorZ} 
+                                    className="graph-canvas"
+                                    data-type="motor"
+                                />}
+                                options={graphOptions("Motor Z")}
+                            />
+                        </Box>
+                    </Grid>
+                    <Grid 
+                        container
+                        direction="row"
+                    >
+                        <Box className="fp-togglebutton-container">
+                            <ToggleButtonGroup
+                            color="primary"
+                            value={points.edit.pump}
+                            exclusive
+                            onChange={handlePumpToggle}
+                        >
+                                <ToggleButton value="start">Pump 1</ToggleButton>
+                                <ToggleButton value="end">Pump 2</ToggleButton>
+                            </ToggleButtonGroup>
+                        </Box>
+                        <Box className="fp-togglebutton-container">
+                            <ToggleButtonGroup
+                            color="primary"
+                            value={points.edit.motor}
+                            exclusive
+                            onChange={handleMotorToggle}
+                        >
+                                <ToggleButton value="start">Motor 1</ToggleButton>
+                                <ToggleButton value="end">Motor 2</ToggleButton>
+                            </ToggleButtonGroup>
+                        </Box>
+                    </Grid>
+                </>
+            )}
         </Box>
     )
 }
