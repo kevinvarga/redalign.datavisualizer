@@ -67,7 +67,7 @@ export const SurfaceCorrectionSlice = createSlice({
             }
             console.log(output);
             */
-           console.log(tempCorrections);
+            //console.log(tempCorrections);
             state.corrections = tempCorrections
         }
     }

@@ -4,11 +4,12 @@ const initialState = {
     allValues: [],
     YValues: [],
     ZValues: [],
-    selectedY: {pump: [], motor: []},
-    selectedZ: {pump: [], motor: []},
+    rangeY: {pump: [], motor: []},
+    rangeZ: {pump: [], motor: []},
     minXYZ: {x:0,y:0,z:0},
     maxXYZ: {x:0,y:0,z:0},
     selectedDataType: "pump",
+    calculation: {},
     isSurfaceCorrected: false
 }
 
@@ -19,8 +20,8 @@ export const LaserDataSlice = createSlice({
         loadData: (state, action) => {
             let tempState = JSON.parse(JSON.stringify(initialState));
             tempState.allValues = action.payload.rawData;
-            tempState.selectedY = {pump: [], motor: []};
-            tempState.selectedZ = {pump: [], motor: []};
+            tempState.rangeY = {pump: [], motor: []};
+            tempState.rangeZ = {pump: [], motor: []};
             let surfaceCorr = action.payload.surfaceCorrection;
             tempState.isSurfaceCorrected = (surfaceCorr !== null);
             for(let i=0;i< action.payload.rawData.length;i++){
@@ -34,8 +35,8 @@ export const LaserDataSlice = createSlice({
                     }
                 }
                 
-                tempState.YValues.push({x:data.x,y:data.y,r:data.radius, index: i});
-                tempState.ZValues.push({x:data.x,y:data.z,r:data.radius, index: i});
+                tempState.YValues.push({x:data.x,y:data.y,r:data.r, index: i});
+                tempState.ZValues.push({x:data.x,y:data.z,r:data.r, index: i});
 
                 tempState.minXYZ.x = (tempState.minXYZ.x === 0) ? data.x : tempState.minXYZ.x;
                 tempState.minXYZ.y = (tempState.minXYZ.y > data.y) ? data.y : tempState.minXYZ.y;
@@ -49,23 +50,27 @@ export const LaserDataSlice = createSlice({
             return tempState;
         },
         setDataRange: (state, action) => {
-            state.selectedY[state.selectedDataType] = [];
-            state.selectedZ[state.selectedDataType] = [];
+            state.rangeY[state.selectedDataType] = [];
+            state.rangeZ[state.selectedDataType] = [];
             for(let i=0;i<state.YValues.length;i++) {
                 if(state.YValues[i].x >= Math.ceil(action.payload.startX) && state.YValues[i].x <= Math.floor(action.payload.endX)) {
                     // both the dataXY and dataXZ are the same length
-                    state.selectedY[state.selectedDataType].push({...state.YValues[i]});
-                    state.selectedZ[state.selectedDataType].push({...state.ZValues[i]});
+                    state.rangeY[state.selectedDataType].push({...state.YValues[i]});
+                    state.rangeZ[state.selectedDataType].push({...state.ZValues[i]});
                 }
             }
+            state.calculation = {};
         },
         setSelectedDataType: (state, action) => {
             state.selectedDataType = action.payload.dataType;
+        },
+        setCalculationValues: (state, action) => {
+            state.calculation[action.payload.calculation] = action.payload.values;
         },
         resetData: (state, action) => initialState,
     }
 })
 
-export const { loadData, setDataRange, setSelectedDataType, resetData } = LaserDataSlice.actions
+export const { loadData, setDataRange, setSelectedDataType, setCalculationValues, resetData } = LaserDataSlice.actions
 
 export default LaserDataSlice.reducer

@@ -56,9 +56,10 @@ export default function DataImport(props) {
             justifyContent="space-evenly"
             alignItems="flex-start"
             justifyItems="center"
-            sx={{padding: "3px"}}
+            sx={{padding: "3px", width: "100%", backgroundColor: "black"}}
         >
-            <Box >
+            <Box><img height="50px" src="./images/logo-reverse.png" alt='logo' /></Box>
+            <Box sx={{paddingTop: "9px"}} >
                 <Button
                     variant="contained"
                     component="label"
@@ -73,10 +74,11 @@ export default function DataImport(props) {
                     value={""}
                     />
                 </Button>
-                <Box component="span" sx={{padding:'5px'}} >{fileName}</Box>
-            </Box>
-            <Box >
-                <Calibration />
+                {(fileName.length > 0) ? 
+                (<Box component="span" sx={{padding:'5px', color:"white"}} >{fileName}</Box>)
+                : 
+                (<></>)}
+                
             </Box>
             <Box sx={{visibility:"hidden"}} >
                 <Button 
@@ -85,6 +87,9 @@ export default function DataImport(props) {
                 >
                         Unload
                 </Button>
+            </Box>
+            <Box sx={{paddingTop: "10px"}} >
+                <Calibration />
             </Box>
         </Grid>
     );

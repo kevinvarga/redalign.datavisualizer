@@ -1,0 +1,18 @@
+.laserpoint-table {
+    width: 100%;
+}
+
+.laserpoint-title {
+    width: 100%;
+    text-align: center;
+}
+
+.laserpoint-label {
+    width: 50%;
+}
+
+.laserpoint-value {
+    width: 50%;
+    font-weight: bold;
+    text-align: right;
+}

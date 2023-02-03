@@ -1,0 +1,10 @@
+.fp-chart-container {
+    position: relative; 
+    height: 50%; 
+    width: 50%;
+}
+
+.fp-togglebutton-container {
+    position: relative;
+    width: 50%;
+}

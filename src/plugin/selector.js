@@ -5,6 +5,7 @@ export const Selector = {
     id: 'selector',
     defaults: {
         select: {
+            enabled: true,
             onDataSelected: 'onDataSelected',
         }
     },
@@ -13,18 +14,22 @@ export const Selector = {
         let chartState = getState(chart);
         chartState.options = options;
 
-        addListeners(chart, options);
+        if(chart.options.select.enabled) {
+            addListeners(chart, options);
+        }
     },
     afterDraw: (chart, args, options) => {
-        let chartState = getState(chart);
-        if(chartState.end !== null) {
-            let left = chartState.start.position.x;
-            let width = chartState.end.position.x - chartState.start.position.x;
-            const {ctx} = chart;
-            ctx.save();
-            ctx.fillStyle = 'rgba(225,225,225,0.3)';
-            ctx.fillRect(left, chart.chartArea.top, width, chart.chartArea.height);
-            ctx.restore();
+        if(chart.options.select.enabled) {
+            let chartState = getState(chart);
+            if(chartState.end !== null) {
+                let left = chartState.start.position.x;
+                let width = chartState.end.position.x - chartState.start.position.x;
+                const {ctx} = chart;
+                ctx.save();
+                ctx.fillStyle = 'rgba(225,225,225,0.3)';
+                ctx.fillRect(left, chart.chartArea.top, width, chart.chartArea.height);
+                ctx.restore();
+            }
         }
         
     }

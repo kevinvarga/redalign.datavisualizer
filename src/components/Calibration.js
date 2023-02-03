@@ -30,6 +30,7 @@ export default function Calibration() {
             }
             label="Surface Correction" 
             variant="outlined" 
+            sx={{color: "white"}}
         />
     );
 }

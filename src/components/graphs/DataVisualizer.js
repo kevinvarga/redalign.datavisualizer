@@ -14,7 +14,8 @@ export default function DataVisualizer(props) {
         }
     }
 
-    const graphOptions = (title, legendPosition)=>{
+    const graphOptions = (title, legendDisplay = true, legendPosition = "right")=>{
+        
         return{
             type: "scatter",
             data: {
@@ -43,6 +44,7 @@ export default function DataVisualizer(props) {
                     duration: 0
                 },
                 select: {
+                    enabled: true,
                     onDataSelected: onDataSelected
                 },
                 plugins: {
@@ -51,7 +53,8 @@ export default function DataVisualizer(props) {
                         text: title
                     },
                     legend: {
-                        position: (legendPosition ?? "right"),
+                        display: (legendDisplay),
+                        position: (legendPosition),
                     }
                 }
             }
@@ -62,7 +65,7 @@ export default function DataVisualizer(props) {
         <Box>
             <Box className="chart-container" >
                 <ScatterGraph
-                    data={[laserData.selectedY.pump,laserData.selectedY.motor, laserData.YValues]}
+                    data={[laserData.rangeY.pump,laserData.rangeY.motor, laserData.YValues]}
                     min={{x:laserData.minXYZ.x, y:laserData.minXYZ.y}}
                     max={{x:laserData.maxXYZ.x, y:laserData.maxXYZ.y}}
                     reset={reset}
@@ -72,12 +75,12 @@ export default function DataVisualizer(props) {
                         ref={canvasRefXY} 
                         className="graph-canvas"
                     />}
-                    options={graphOptions("Y Values")}
+                    options={graphOptions("Y Values", false)}
                 />
             </Box>
             <Box className="chart-container" >
                 <ScatterGraph
-                        data={[laserData.selectedZ.pump,laserData.selectedZ.motor, laserData.ZValues]}
+                        data={[laserData.rangeZ.pump,laserData.rangeZ.motor, laserData.ZValues]}
                         min={{x:laserData.minXYZ.x, y:laserData.minXYZ.z}}
                         max={{x:laserData.maxXYZ.x, y:laserData.maxXYZ.z}}
                         reset={reset}
@@ -87,7 +90,7 @@ export default function DataVisualizer(props) {
                             ref={canvasRefXZ} 
                             className="graph-canvas"
                         />}
-                        options={graphOptions("Z Values")}
+                        options={graphOptions("Z Values", true, "bottom")}
                     />
             </Box>
         </Box>

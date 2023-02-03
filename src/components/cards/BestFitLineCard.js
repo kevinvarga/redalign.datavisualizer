@@ -14,7 +14,7 @@ export default function BestFitLineCard(props){
 }
 
 /*
-{((laserData.selectedY.pump.length > 0) && (laserData.selectedY.motor.length > 0)) ? (
+{((laserData.rangeY.pump.length > 0) && (laserData.rangeY.motor.length > 0)) ? (
                     <Box >
                         {formatResult(calculate())}
                     </Box>                
