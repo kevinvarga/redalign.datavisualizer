@@ -21,6 +21,10 @@ export default function FourPointCard(props) {
         setTabValue(newValue);
     }
 
+    const isVisible = (index) => {
+        return (tabValue === index) ? "" : "none";
+    }
+
     const formatResult = () => {
 
         if(laserData.calculation.fourpoint) {
@@ -72,15 +76,12 @@ export default function FourPointCard(props) {
                     </Tabs>
                 </Box>
 
-                {((tabValue === 0)) ? (
-                    <>
-                        <FourPointGraph />
-                    </>                
-                ) : (
-                    <>
-                        <FourPointValuePanel result={result} />
-                    </>
-                )}
+                <Box sx={{display: isVisible(0)}}>
+                    <FourPointGraph  />
+                </Box>
+                <Box sx={{display: isVisible(1)}} >
+                    <FourPointValuePanel result={result} />
+                </Box>
             </Box>
         )
     }
