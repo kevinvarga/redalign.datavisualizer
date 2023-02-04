@@ -1,5 +1,5 @@
 import { Box, Card, CardContent, CardHeader, Grid, Tabs, Tab } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { setCalculationValues } from "../../reducer/LaserDataSlice";
 import FourPoint from "../calculations/FourPoint";
@@ -9,13 +9,19 @@ import FourPointValuePanel from "./FourPointValuePanel";
 import LaserPoint from "./LaserPoint";
 
 export default function FourPointCard(props) {
-    const {laserData} = props;
+    const {laserData, reset} = props;
     const dispatch = useDispatch();
     const [tabValue, setTabValue] = useState(0);
 
     let points;
     let result;
     let fp;
+
+    useEffect(() => {
+        if(reset) {
+            setTabValue(0);
+        }
+    }, [reset])
 
     const handleTabChange = (event, newValue) => {
         setTabValue(newValue);

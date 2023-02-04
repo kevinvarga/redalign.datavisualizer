@@ -94,7 +94,7 @@ function App() {
                   <Grid container
                     direction="row"
                     >
-                    <FourPointCard laserData={laserData} />
+                    <FourPointCard laserData={laserData} reset={reset} />
                   </Grid>
               </Grid>
             </Box>
