@@ -2,9 +2,11 @@
     width: 100%;
     font-size: small;
 }
+
 .shim-title {
     font-weight: bold;
     text-align: left;
+    width: 40% !important;
 }
 
 .shim-column {
@@ -13,6 +15,7 @@
 
 .shim-label {
     text-align: right;
+    width: 10% !important; 
 }
 
 .shim-value {
