@@ -77,7 +77,7 @@ export default function FourPointCard(props) {
                 </Box>
 
                 <Box sx={{display: isVisible(0)}}>
-                    <FourPointGraph  />
+                    <FourPointGraph laserData={laserData} />
                 </Box>
                 <Box sx={{display: isVisible(1)}} >
                     <FourPointValuePanel result={result} />

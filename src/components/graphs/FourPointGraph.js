@@ -1,10 +1,11 @@
 import { Grid, ToggleButton, ToggleButtonGroup } from "@mui/material";
 import { Box } from "@mui/system";
 import React, { useEffect, useRef, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { setCalculationValues } from "../../reducer/LaserDataSlice";
 import "./FourPointGraph.css";
 import ScatterGraph from "./ScatterGraph";
+let laserData;
 let points; // needs to be outside function for scoping issue with grid events.
 
 export default function FourPointGraph(props) {
@@ -12,10 +13,10 @@ export default function FourPointGraph(props) {
     const canvasRefMotorY = useRef();
     const canvasRefPumpZ = useRef();
     const canvasRefMotorZ = useRef();
-    const laserData = useSelector((state) => state.laserData);
     const dispatch = useDispatch();
     const [refresh, setRefresh] = useState(true);
-
+    
+    laserData =  props.laserData; //useSelector((state) => state.laserData);
     points = laserData.calculation.fourpoint; 
 
     useEffect(() => {
