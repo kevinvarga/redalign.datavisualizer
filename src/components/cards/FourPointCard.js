@@ -66,21 +66,21 @@ export default function FourPointCard(props) {
                     <FourPointShims result={result} />
                 </Grid>
 
-                <Box>
+                <Box sx={{paddingBottom: "3px"}}>
                     <Tabs
                         value={tabValue}
                         onChange={handleTabChange}
                     >
-                        <Tab label="Edit Points" />
                         <Tab label="Calculations" />
+                        <Tab label="Edit Points" />
                     </Tabs>
                 </Box>
 
                 <Box sx={{display: isVisible(0)}}>
-                    <FourPointGraph laserData={laserData} />
+                    <FourPointValuePanel result={result} />
                 </Box>
                 <Box sx={{display: isVisible(1)}} >
-                    <FourPointValuePanel result={result} />
+                    <FourPointGraph laserData={laserData} />
                 </Box>
             </Box>
         )
