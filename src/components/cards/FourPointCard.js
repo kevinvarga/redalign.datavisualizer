@@ -1,4 +1,4 @@
-import { Box, Grid, Tabs, Tab, Accordion, AccordionSummary, AccordionDetails } from "@mui/material";
+import { Box, Tabs, Tab, Accordion, AccordionSummary, AccordionDetails } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { setCalculationValues } from "../../reducer/LaserDataSlice";
