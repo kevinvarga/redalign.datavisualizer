@@ -1,12 +1,12 @@
-import { Box, Card, CardContent, CardHeader, Grid, Tabs, Tab } from "@mui/material";
+import { Box, Grid, Tabs, Tab, Accordion, AccordionSummary, AccordionDetails } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { setCalculationValues } from "../../reducer/LaserDataSlice";
 import FourPoint from "../calculations/FourPoint";
 import FourPointGraph from "../graphs/FourPointGraph";
-import FourPointShims from "./FourPointShims";
-import FourPointValuePanel from "./FourPointValuePanel";
-import LaserPoint from "./LaserPoint";
+import ShimPanel from "./ShimPanel";
+import CalculationPanel from "./CalculationPanel";
+import { ExpandMore } from "@mui/icons-material";
 
 export default function FourPointCard(props) {
     const {laserData, reset} = props;
@@ -57,56 +57,51 @@ export default function FourPointCard(props) {
         result = fp.calculate();
         
         return(
-            <Box sx={{fontSize: "10pt", width:"100%"}}>
-                <Grid
-                    container
-                    direction="row"
-                    justifyContent="center"
-                    alignItems="center"
-                    className="laserpoint-table"
-                >
-                    <LaserPoint title="Pump 1" point={result.pump1} />
-                    <LaserPoint title="Pump 2" point={result.pump2} />            
-                    <LaserPoint title="Motor 1" point={result.motor1} />
-                    <LaserPoint title="Motor 2" point={result.motor2} />
-                    <FourPointShims result={result} />
-                </Grid>
-
-                <Box sx={{paddingBottom: "3px"}}>
-                    <Tabs
-                        value={tabValue}
-                        onChange={handleTabChange}
+            <>
+                <Accordion>
+                    <AccordionSummary
+                        expandIcon={<ExpandMore />}    
                     >
-                        <Tab label="Calculations" />
-                        <Tab label="Edit Points" />
-                    </Tabs>
-                </Box>
+                        <ShimPanel title="Four Point" result={result} />
+                    </AccordionSummary>
+                    <AccordionDetails>
+                        <Box sx={{width:"100%", height: "555px"}}>
+                            <Box sx={{paddingBottom: "3px"}}>
+                                <Tabs
+                                    value={tabValue}
+                                    onChange={handleTabChange}
+                                >
+                                    <Tab label="Calculations" />
+                                    <Tab label="Edit Points" />
+                                </Tabs>
+                            </Box>
 
-                <Box sx={{display: isVisible(0)}}>
-                    <FourPointValuePanel result={result} />
-                </Box>
-                <Box sx={{display: isVisible(1)}} >
-                    <FourPointGraph laserData={laserData} />
-                </Box>
-            </Box>
+                            <Box sx={{display: isVisible(0)}}>
+                                <CalculationPanel result={result} />
+                            </Box>
+                            <Box sx={{display: isVisible(1)}} >
+                                <FourPointGraph result={result} laserData={laserData} />
+                            </Box>  
+                        </Box>
+                    </AccordionDetails>
+                </Accordion>
+            </>
         )
     }
 
     return(
-        <Card variant="outlined" className="calculated-value-card" >
-            <CardContent>
-                {((laserData.rangeY.pump.length > 0) && (laserData.rangeY.motor.length > 0)) ? (
-                    <>
-                        <CardHeader sx={{padding: "5px"}} title="Four Point" />
-                        {formatResult()}
-                    </>                
-                ) : (
-                    <>
-                        <CardHeader title="Four Point" subheader="Select pump and motor data" />
-                    </>
-                )}
-            </CardContent>
-        </Card>
+        <Box  className="calculated-value-card" >
+            {((laserData.rangeY.pump.length > 0) && (laserData.rangeY.motor.length > 0)) ? (
+                <Box >
+                    {formatResult()}
+                </Box>                
+            ) : (
+            <>
+                <p>Four Point</p>
+                <label>Select pump and motor data</label>
+            </>
+            )}
+        </Box>
     )
 }
 

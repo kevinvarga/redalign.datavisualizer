@@ -1,10 +1,9 @@
 import { roundToX } from "../../common/common";
+import ShimValues from "./ShimValues";
 
 export default class FourPoint {
     constructor(ld, points) {
         this.laserData = ld;
-        this.X5 = 475000;
-        this.X6 = 650000;
         this.points = points;
     }
 
@@ -23,32 +22,7 @@ export default class FourPoint {
             formula: `${y} - (${roundToX(slope, 5)} * ${x})`
         }
     }
-
-    calcYZ = (pitchYaw, footPosition, intercept) => {
-        return {
-            value: (pitchYaw * footPosition + intercept),
-            formula: `${roundToX(pitchYaw,5)} * ${footPosition} + ${roundToX(intercept,5)}`
-        };
-    }
-
-    calcFootXY = (pitch, yaw, yIntercept, zIntercept) => {
-        return {
-            y5: this.calcYZ(pitch, this.X5, yIntercept),
-            y6: this.calcYZ(pitch, this.X6, yIntercept),
-            z5: this.calcYZ(yaw, this.X5, zIntercept),
-            z6: this.calcYZ(yaw, this.X6, zIntercept)
-        };
-    }
-
-    calcShim = (ideal, existing) => {
-        const micron = 0.00003937;
-        const shim = ideal - existing
-        return {
-            value: shim,
-            formula: `${roundToX(ideal,5)} - ${roundToX(existing,5)}`,
-            converted: shim * micron
-        }
-    }
+    
 
     calculate = () => {
         let pump1 = this.laserData.allValues[this.laserData.rangeY.pump[this.points.pump.start].index]; // this.laserData.allValues[this.laserData.rangeY.pump[0].index];
@@ -66,8 +40,10 @@ export default class FourPoint {
         let mYIntercept = this.calcIntercept(mPitch.value, motor1.x, motor1.y);
         let mZIntercept = this.calcIntercept(mYaw.value, motor1.x, motor1.z);
 
-        let idealFoot = this.calcFootXY(pPitch.value, pYaw.value, pYIntercept.value, pZIntercept.value);
-        let existingFoot = this.calcFootXY(mPitch.value, mYaw.value, mYIntercept.value, mZIntercept.value);
+        let shims = new ShimValues();
+
+        let idealFoot = shims.calcFootXY(pPitch.value, pYaw.value, pYIntercept.value, pZIntercept.value);
+        let existingFoot = shims.calcFootXY(mPitch.value, mYaw.value, mYIntercept.value, mZIntercept.value);
 
         return {
             pump1: pump1,
@@ -84,10 +60,10 @@ export default class FourPoint {
             motorZIntercept: mZIntercept,
             idealFoot: idealFoot,
             existingFoot: existingFoot,
-            frontYShim: this.calcShim(idealFoot.y5.value, existingFoot.y5.value),
-            rearYShim: this.calcShim(idealFoot.y6.value, existingFoot.y6.value),
-            frontZShim: this.calcShim(idealFoot.z5.value, existingFoot.z5.value),
-            rearZShim: this.calcShim(idealFoot.z6.value, existingFoot.z6.value)
+            frontYShim: shims.calcShim(idealFoot.y5.value, existingFoot.y5.value),
+            rearYShim: shims.calcShim(idealFoot.y6.value, existingFoot.y6.value),
+            frontZShim: shims.calcShim(idealFoot.z5.value, existingFoot.z5.value),
+            rearZShim: shims.calcShim(idealFoot.z6.value, existingFoot.z6.value)
         };
     }
 }

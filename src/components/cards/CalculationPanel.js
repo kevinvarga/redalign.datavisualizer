@@ -2,7 +2,7 @@ import { Box } from "@mui/material";
 import React from "react";
 import CalculatedValue from "./CalculatedValue";
 
-export default function FourPointValuePanel(props) {
+export default function CalculationPanel(props) {
     const {result} = props;
 
     return(

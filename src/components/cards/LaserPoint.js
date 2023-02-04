@@ -6,7 +6,7 @@ export default function LaserPoint(props) {
     const {title, point} = props;
 
     return(
-        <Box sx={{padding: "5px", position: "relative", width:"20%"}}>
+        <Box sx={{position: "relative", width:"20%"}}>
             <Grid
             container
             direction="row"

@@ -6,6 +6,7 @@ import DataImport from './components/DataImport';
 import DataVisualizer from './components/graphs/DataVisualizer';
 import { setDataRange, setSelectedDataType } from './reducer/LaserDataSlice';
 import './App.css';
+import BestFitLineCard from './components/cards/BestFitLineCard';
 
 function App() {
   const [reset, setReset] = useState(false);
@@ -94,6 +95,7 @@ function App() {
                   <Grid container
                     direction="row"
                     >
+                    <BestFitLineCard laserData={laserData} reset={reset} />
                     <FourPointCard laserData={laserData} reset={reset} />
                   </Grid>
               </Grid>

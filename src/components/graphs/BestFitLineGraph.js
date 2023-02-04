@@ -1,25 +1,23 @@
-import { Grid, ToggleButton, ToggleButtonGroup } from "@mui/material";
+import { Grid } from "@mui/material";
 import { Box } from "@mui/system";
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import { setCalculationValues } from "../../reducer/LaserDataSlice";
-import SelectedPoints from "../cards/SelectedPoints";
 import "./FourPointGraph.css";
 import ScatterGraph from "./ScatterGraph";
-let laserData;
-let points; // needs to be outside function for scoping issue with grid events.
+let bflLaserData;
+let bflPoints; // needs to be outside function for scoping issue with grid events.
 
-export default function FourPointGraph(props) {
-    const canvasRefPumpY = useRef();
-    const canvasRefMotorY = useRef();
-    const canvasRefPumpZ = useRef();
-    const canvasRefMotorZ = useRef();
+export default function BestFitLineGraph(props) {
+    const canvasBFLRefPumpY = useRef();
+    const canvasBFLRefMotorY = useRef();
+    const canvasBFLRefPumpZ = useRef();
+    const canvasBFLRefMotorZ = useRef();
     const dispatch = useDispatch();
     const [refresh, setRefresh] = useState(true);
-    const result = props.result;
-
-    laserData =  props.laserData; //useSelector((state) => state.laserData);
-    points = laserData.calculation.fourpoint; 
+    
+    bflLaserData =  props.laserData; 
+    bflPoints = props.points; 
 
     useEffect(() => {
         if(refresh) {
@@ -33,11 +31,11 @@ export default function FourPointGraph(props) {
         const index = ctx.dataIndex;
         const dataType = ctx.chart.canvas.dataset.type;
         
-        if(points) {
+        if(bflPoints) {
             if(dataType === "pump") {
-                return (index === points.pump.start) || (index === points.pump.end);    
+                return (bflPoints.pump.exclude.indexOf(index) !== -1);
             } else {
-                return (index === points.motor.start) || (index === points.motor.end);
+                return (bflPoints.motor.exclude.indexOf(index) !== -1);
             }
         } else {
             return false;
@@ -45,7 +43,7 @@ export default function FourPointGraph(props) {
     }
 
     const activePointColor = (ctx) => {
-        return isSelectedPoint(ctx) ? 'rgba(255, 0, 0, .5)' : 'rgba(10, 10, 10, .5)';
+        return isSelectedPoint(ctx) ? 'rgb(255, 0, 0, .5)' : 'rgba(10, 10, 10, .5)';
     }
 
     const activePointRadius = (ctx) => {
@@ -53,31 +51,26 @@ export default function FourPointGraph(props) {
     }
 
     const activePointStyle = (ctx) => {
-        return isSelectedPoint(ctx) ?  'rect' : 'circle'; 
+        return isSelectedPoint(ctx) ?  'crossRot' : 'circle'; 
     }
 
     const handleChartClick = (evt) => {
         let elements = evt.chart.getActiveElements();
-        if(points && elements.length > 0) {
+        if(bflPoints && elements.length > 0) {
             const dataType = evt.chart.canvas.dataset.type;
-            let editPoint = (dataType === "pump") ? points.edit.pump : points.edit.motor;
-            let tempPoints = JSON.parse(JSON.stringify(points));
-            tempPoints[dataType][editPoint] = elements[0].index;
-            dispatch(setCalculationValues({calculation:"fourpoint", values: tempPoints }));
+            let tempExcluded = JSON.parse(JSON.stringify(bflPoints));
+            let excludeIndex = tempExcluded[dataType].exclude.indexOf(elements[0].index);
+            
+            if(excludeIndex === -1) {
+                tempExcluded[dataType].exclude.push(elements[0].index);
+            } else {
+                tempExcluded[dataType].exclude.splice(excludeIndex, 1);
+            }            
+            
+            dispatch(setCalculationValues({calculation:"bestfitline", values: tempExcluded }));
         }
     }
 
-    const handlePumpToggle = (event) => {
-        let tempPoints = JSON.parse(JSON.stringify(points));
-        tempPoints.edit.pump = event.target.value;
-        dispatch(setCalculationValues({calculation:"fourpoint", values: tempPoints }));
-    }
-
-    const handleMotorToggle = (event) => {
-        let tempPoints = JSON.parse(JSON.stringify(points));
-        tempPoints.edit.motor = event.target.value;
-        dispatch(setCalculationValues({calculation:"fourpoint", values: tempPoints }));
-    }
 
     const graphOptions = (title) => {
         return{
@@ -116,6 +109,7 @@ export default function FourPointGraph(props) {
                 elements: {
                     point: {
                         backgroundColor: activePointColor,
+                        borderColor: activePointColor,
                         pointStyle: activePointStyle,
                         radius: activePointRadius,
                     }
@@ -125,38 +119,23 @@ export default function FourPointGraph(props) {
         };
     }
 
-    const renderPoints = () => {
-        if(result) {
-            return(
-                <Grid
-                    container
-                    direction="row"
-                >
-                    <SelectedPoints result={result} />
-
-                </Grid>
-            );
-        }
-    }
-
     return (
         <Box>
             {(refresh) ? 
             (<><label>loading...</label></>):
             (
                 <>
-                    {renderPoints()}
                     <Grid
                         container
                         direction="row"
                     >
                         <Box className="fp-chart-container" >
                             <ScatterGraph 
-                                data={[laserData.rangeY.pump]}
+                                data={[bflLaserData.rangeY.pump]}
                                 content={
                                 <canvas 
                                     id="pumpY" 
-                                    ref={canvasRefPumpY} 
+                                    ref={canvasBFLRefPumpY} 
                                     className="graph-canvas"
                                     data-type="pump"
                                 />}
@@ -165,11 +144,11 @@ export default function FourPointGraph(props) {
                         </Box>
                         <Box className="fp-chart-container" >
                             <ScatterGraph 
-                                data={[laserData.rangeY.motor]}
+                                data={[bflLaserData.rangeY.motor]}
                                 content={
                                 <canvas 
                                     id="motorY" 
-                                    ref={canvasRefMotorY} 
+                                    ref={canvasBFLRefMotorY} 
                                     className="graph-canvas"
                                     data-type="motor"
                                 />}
@@ -183,11 +162,11 @@ export default function FourPointGraph(props) {
                     >
                         <Box className="fp-chart-container" >
                             <ScatterGraph 
-                                data={[laserData.rangeZ.pump]}
+                                data={[bflLaserData.rangeZ.pump]}
                                 content={
                                 <canvas 
                                     id="pumpZ" 
-                                    ref={canvasRefPumpZ} 
+                                    ref={canvasBFLRefPumpZ} 
                                     className="graph-canvas"
                                     data-type="pump"
                                 />}
@@ -196,43 +175,16 @@ export default function FourPointGraph(props) {
                         </Box>
                         <Box className="fp-chart-container" >
                             <ScatterGraph 
-                                data={[laserData.rangeZ.motor]}
+                                data={[bflLaserData.rangeZ.motor]}
                                 content={
                                 <canvas 
                                     id="motorZ" 
-                                    ref={canvasRefMotorZ} 
+                                    ref={canvasBFLRefMotorZ} 
                                     className="graph-canvas"
                                     data-type="motor"
                                 />}
                                 options={graphOptions("Motor Z")}
                             />
-                        </Box>
-                    </Grid>
-                    <Grid 
-                        container
-                        direction="row"
-                    >
-                        <Box className="fp-togglebutton-container">
-                            <ToggleButtonGroup
-                            color="primary"
-                            value={points ? points.edit.pump : "start"}
-                            exclusive
-                            onChange={handlePumpToggle}
-                        >
-                                <ToggleButton value="start">Pump 1</ToggleButton>
-                                <ToggleButton value="end">Pump 2</ToggleButton>
-                            </ToggleButtonGroup>
-                        </Box>
-                        <Box className="fp-togglebutton-container">
-                            <ToggleButtonGroup
-                            color="primary"
-                            value={points ? points.edit.motor : "start"}
-                            exclusive
-                            onChange={handleMotorToggle}
-                        >
-                                <ToggleButton value="start">Motor 1</ToggleButton>
-                                <ToggleButton value="end">Motor 2</ToggleButton>
-                            </ToggleButtonGroup>
                         </Box>
                     </Grid>
                 </>
@@ -241,9 +193,15 @@ export default function FourPointGraph(props) {
     )
 }
 
-/*
-                    <LaserPoint title="Pump 1" point={result.pump1} />
-                    <LaserPoint title="Pump 2" point={result.pump2} />            
-                    <LaserPoint title="Motor 1" point={result.motor1} />
-                    <LaserPoint title="Motor 2" point={result.motor2} />
-*/
+
+/*     const handlePumpToggle = (event) => {
+        let tempPoints = JSON.parse(JSON.stringify(points));
+        tempPoints.edit.pump = event.target.value;
+        dispatch(setCalculationValues({calculation:"fourpoint", values: tempPoints }));
+    }
+
+    const handleMotorToggle = (event) => {
+        let tempPoints = JSON.parse(JSON.stringify(points));
+        tempPoints.edit.motor = event.target.value;
+        dispatch(setCalculationValues({calculation:"fourpoint", values: tempPoints }));
+    } */

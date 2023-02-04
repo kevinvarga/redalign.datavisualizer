@@ -1,0 +1,13 @@
+.four-point-panel {
+    font-size: 8pt;
+    position: "relative"; 
+    width: 100%;
+}
+
+.four-point-column {
+    width: 20%;
+}
+
+.four-point-value {
+    font-weight: bold;
+}
