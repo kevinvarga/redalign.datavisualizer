@@ -71,16 +71,16 @@ export default function FourPointCard(props) {
                                     value={tabValue}
                                     onChange={handleTabChange}
                                 >
-                                    <Tab label="Edit Points" />
                                     <Tab label="Calculations" />
+                                    <Tab label="Edit Points" />
                                 </Tabs>
                             </Box>
 
                             <Box sx={{display: isVisible(0)}}>
-                                <FourPointGraph result={result} laserData={laserData} />
+                                <CalculationPanel result={result} />
                             </Box>
                             <Box sx={{display: isVisible(1)}} >
-                                <CalculationPanel result={result} />
+                                <FourPointGraph result={result} laserData={laserData} />
                             </Box>  
                         </Box>
                     </AccordionDetails>
