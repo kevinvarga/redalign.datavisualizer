@@ -21,10 +21,10 @@ export const Selector = {
     afterDraw: (chart, args, options) => {
         if(chart.options.select.enabled) {
             let chartState = getState(chart);
-            if(chartState.end !== null) {
+            const {ctx} = chart;
+            if(chartState.start !== null && chartState.end !== null) {
                 let left = chartState.start.position.x;
                 let width = chartState.end.position.x - chartState.start.position.x;
-                const {ctx} = chart;
                 ctx.save();
                 ctx.fillStyle = 'rgba(225,225,225,0.3)';
                 ctx.fillRect(left, chart.chartArea.top, width, chart.chartArea.height);

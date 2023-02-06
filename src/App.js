@@ -1,10 +1,10 @@
-import { Box, FormControl, FormHelperText, Grid, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material';
+import { Box, Grid, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import FourPointCard from './components/cards/FourPointCard';
 import DataImport from './components/DataImport';
 import DataVisualizer from './components/graphs/DataVisualizer';
-import { setDataRange, setSelectedDataType } from './reducer/LaserDataSlice';
+import { setDataRange } from './reducer/LaserDataSlice';
 import './App.css';
 import BestFitLineCard from './components/cards/BestFitLineCard';
 
@@ -37,10 +37,6 @@ function App() {
     dispatch(setDataRange({startX: start.data.x, endX: end.data.x}));
   }
 
-  const handleSelect = (event) => {
-    dispatch(setSelectedDataType({dataType: event.target.value}));
-  }
-
   const renderSplash = () => {
     return (
       <Box sx={{padding:"50px"}}>
@@ -65,28 +61,6 @@ function App() {
                 reset={reset}
                 onRangeUpdated={onRangeUpdated}
               />
-              <FormControl size="small">
-                <FormHelperText >Choose type of data to select</FormHelperText>
-                <ToggleButtonGroup
-                  color="primary"
-                  value={laserData.selectedDataType}
-                  exclusive
-                  onChange={handleSelect}
-                  disabled={(laserData.YValues.length === 0)}
-                  fullWidth={true}
-                >
-                  <ToggleButton 
-                    value="pump"
-                  >
-                    Pump
-                  </ToggleButton>
-                  <ToggleButton 
-                    value="motor" 
-                  >
-                    Motor
-                  </ToggleButton>
-                </ToggleButtonGroup>
-            </FormControl>
             </Box>
             <Box sx={{width:"50vw", minWidth: "50vw", paddingTop: "34px"}}>
               <Grid 

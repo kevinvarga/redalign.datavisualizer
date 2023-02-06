@@ -3,13 +3,14 @@ import {
     Chart,
     ScatterController,
     LinearScale, PointElement, LineElement, Legend, Title,
-    CategoryScale
+    CategoryScale,
+    Tooltip
 } from 'chart.js';
 import { Selector } from "../../plugin/selector";
 import chartTrendline from "chartjs-plugin-trendline";
 import Zoom from "chartjs-plugin-zoom";
 
-Chart.register(ScatterController, LinearScale, CategoryScale, PointElement, LineElement, Legend, Selector, Zoom, Title, chartTrendline);
+Chart.register(ScatterController, LinearScale, CategoryScale, PointElement, LineElement, Legend, Selector, Zoom, Title, chartTrendline, Tooltip);
 
 export default function ScatterGraph(props) {
     const scatterChart = useRef(null);

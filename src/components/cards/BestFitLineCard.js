@@ -56,7 +56,7 @@ export default function BestFitLineCard(props){
                         <ShimPanel title="Best Fit Line" result={result} />
                     </AccordionSummary>
                     <AccordionSummary>
-                        <Box sx={{width:"100%", height: "450px"}}>
+                        <Box sx={{width:"100%", height: "525px"}}>
                             <Box sx={{paddingBottom: "3px"}}>
                                 <Tabs
                                     value={tabValue}

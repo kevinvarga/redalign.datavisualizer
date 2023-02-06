@@ -22,7 +22,8 @@ export default function DataImport(props) {
         for(let l=0;l<lines.length;l++) {
           let line = lines[l].replace('\r','').split('\t');
           
-          if(line[1] !== '') {
+          if(line[1] !== '' && !isNaN(line[0]) && !isNaN(line[1]) && !isNaN(line[2]) && !isNaN(line[3])) {
+            
             data.push({x:Number(line[0]),y:Number(line[1]),z:Number(line[2]),r:Number(line[3])});
           }
         }
