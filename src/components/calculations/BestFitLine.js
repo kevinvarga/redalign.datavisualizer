@@ -76,8 +76,7 @@ export default class BestFitLine  {
     getData = (firstIndex, lastIndex, exclude) => {
 
         let data = this.laserData.allValues.slice(firstIndex, lastIndex + 1);
-        console.log(data);
-
+        
         // remove excluded elements
         if(exclude.length > 0){
             for(let i=0;i<exclude.length;i++){
@@ -85,9 +84,7 @@ export default class BestFitLine  {
                 if(removeIndex !== -1){
                     data.splice(removeIndex, 1);
                 }
-            }
-            console.log("excluded point removed");
-            console.log(data);
+            }    
         }
         return data;
     }
@@ -102,8 +99,6 @@ export default class BestFitLine  {
 
     calculate = () => {
         try {
-            console.log("BestFitLine.calculate");
-
             // to get the first and last index of the pump/motor range use either rangeY or rangeZ can be used since they contains the same number of values
             let pumpExclude = [];
             let motorExclude = [];
@@ -111,8 +106,6 @@ export default class BestFitLine  {
                 pumpExclude = this.getExcludedPoints(this.laserData.rangeY.pump, this.laserData.calculation.bestfitline.pump.exclude); 
                 motorExclude = this.getExcludedPoints(this.laserData.rangeY.motor, this.laserData.calculation.bestfitline.motor.exclude);
             }
-            console.log(pumpExclude);
-            console.log(motorExclude);
             
             let pumpData = this.getData(this.laserData.rangeY.pump[0].index, this.laserData.rangeY.pump[this.laserData.rangeY.pump.length - 1].index, pumpExclude);
             let motorData = this.getData(this.laserData.rangeY.motor[0].index, this.laserData.rangeY.motor[this.laserData.rangeY.motor.length - 1].index, motorExclude);

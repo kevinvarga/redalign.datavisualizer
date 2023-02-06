@@ -10,7 +10,7 @@
 }
 
 .shim-column {
-    width: 25%;
+    width: 12%;
 }
 
 .shim-label {
@@ -20,4 +20,9 @@
 
 .shim-value {
     font-weight: bold;
+    text-align: right;
+}
+
+.shim-caption {
+    text-align: right;
 }
