@@ -15,7 +15,7 @@ Chart.register(ScatterController, LinearScale, CategoryScale, PointElement, Line
 export default function ScatterGraph(props) {
     const scatterChart = useRef(null);
     const contentId = useRef(null);
-    const {data, min, max, reset, content, options, refresh} = props;
+    const {data, min, max, reset, content, options} = props;
     contentId.current = content.id;
 
     useEffect(() => {
@@ -47,7 +47,7 @@ export default function ScatterGraph(props) {
                 scatterChart.current.update();
            }
         }
-    }, [data, min, max, reset, content, options, refresh, scatterChart]);
+    }, [data, min, max, reset, content, options, scatterChart]);
 
     return (
         <>

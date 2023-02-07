@@ -69,6 +69,7 @@ export default function BestFitLineCard(props){
 
                             <Box sx={{display: isVisible(0)}}>
                                 <BestFitLineGraph 
+                                    reset={reset}
                                     display={isVisible(0)} 
                                     laserData={laserData} 
                                     points={points} 
@@ -99,8 +100,3 @@ export default function BestFitLineCard(props){
         </Box>
     );
 }
-
-/*
-
-                
-*/

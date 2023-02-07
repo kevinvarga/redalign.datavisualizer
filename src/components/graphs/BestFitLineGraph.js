@@ -16,6 +16,7 @@ export default function BestFitLineGraph(props) {
     const dispatch = useDispatch();
     const [refresh, setRefresh] = useState(true);
     const display = props.display ?? true;
+    const reset = props.reset;
     bflLaserData =  props.laserData; 
     bflPoints = props.points; 
 
@@ -25,7 +26,7 @@ export default function BestFitLineGraph(props) {
         } else if(refresh) {
             window.setTimeout(() => {
                 setRefresh(false);
-            }, 100);
+            }, 1000);
         }
     }, [display, refresh])
 
@@ -123,87 +124,77 @@ export default function BestFitLineGraph(props) {
 
     return (
         <Box>
-            {(refresh) ? 
-            (<><label>Loading charts...</label></>) 
-            : (
-                <>
-                    <Grid
-                        container
-                        direction="row"
-                    >
-                        <Box className="fp-chart-container" >
-                            <ScatterGraph 
-                                data={[bflLaserData.rangeY.pump]}
-                                content={
-                                <canvas 
-                                    id="pumpY" 
-                                    ref={canvasBFLRefPumpY} 
-                                    className="graph-canvas"
-                                    data-type="pump"
-                                />}
-                                options={graphOptions("Pump Y")}
-                            />
-                        </Box>
-                        <Box className="fp-chart-container" >
-                            <ScatterGraph 
-                                data={[bflLaserData.rangeY.motor]}
-                                content={
-                                <canvas 
-                                    id="motorY" 
-                                    ref={canvasBFLRefMotorY} 
-                                    className="graph-canvas"
-                                    data-type="motor"
-                                />}
-                                options={graphOptions("Motor Y")}
-                            />
-                        </Box>
-                    </Grid>
-                    <Grid
-                        container
-                        direction="row"
-                    >
-                        <Box className="fp-chart-container" >
-                            <ScatterGraph 
-                                data={[bflLaserData.rangeZ.pump]}
-                                content={
-                                <canvas 
-                                    id="pumpZ" 
-                                    ref={canvasBFLRefPumpZ} 
-                                    className="graph-canvas"
-                                    data-type="pump"
-                                />}
-                                options={graphOptions("Pump Z")}
-                            />
-                        </Box>
-                        <Box className="fp-chart-container" >
-                            <ScatterGraph 
-                                data={[bflLaserData.rangeZ.motor]}
-                                content={
-                                <canvas 
-                                    id="motorZ" 
-                                    ref={canvasBFLRefMotorZ} 
-                                    className="graph-canvas"
-                                    data-type="motor"
-                                />}
-                                options={graphOptions("Motor Z")}
-                            />
-                        </Box>
-                    </Grid>
-                </>
-            )}
+            <>
+                <Grid
+                    container
+                    direction="row"
+                >
+                    <Box className="fp-chart-container" >
+                        <ScatterGraph 
+                            data={[bflLaserData.rangeY.pump]}
+                            reset={reset}
+                            content={
+                            <canvas 
+                                id="pumpY" 
+                                ref={canvasBFLRefPumpY} 
+                                className="graph-canvas"
+                                data-type="pump"
+                            />}
+                            options={graphOptions("Pump Y")}
+                        />
+                    </Box>
+                    <Box className="fp-chart-container" >
+                        <ScatterGraph 
+                            data={[bflLaserData.rangeY.motor]}
+                            reset={reset}
+                            content={
+                            <canvas 
+                                id="motorY" 
+                                ref={canvasBFLRefMotorY} 
+                                className="graph-canvas"
+                                data-type="motor"
+                            />}
+                            options={graphOptions("Motor Y")}
+                        />
+                    </Box>
+                </Grid>
+                <Grid
+                    container
+                    direction="row"
+                >
+                    <Box className="fp-chart-container" >
+                        <ScatterGraph 
+                            data={[bflLaserData.rangeZ.pump]}
+                            content={
+                            <canvas 
+                                id="pumpZ" 
+                                ref={canvasBFLRefPumpZ} 
+                                className="graph-canvas"
+                                data-type="pump"
+                            />}
+                            options={graphOptions("Pump Z")}
+                        />
+                    </Box>
+                    <Box className="fp-chart-container" >
+                        <ScatterGraph 
+                            data={[bflLaserData.rangeZ.motor]}
+                            content={
+                            <canvas 
+                                id="motorZ" 
+                                ref={canvasBFLRefMotorZ} 
+                                className="graph-canvas"
+                                data-type="motor"
+                            />}
+                            options={graphOptions("Motor Z")}
+                        />
+                    </Box>
+                </Grid>
+            </>
+            
         </Box>
     )
 }
-
-
-/*     const handlePumpToggle = (event) => {
-        let tempPoints = JSON.parse(JSON.stringify(points));
-        tempPoints.edit.pump = event.target.value;
-        dispatch(setCalculationValues({calculation:"fourpoint", values: tempPoints }));
-    }
-
-    const handleMotorToggle = (event) => {
-        let tempPoints = JSON.parse(JSON.stringify(points));
-        tempPoints.edit.motor = event.target.value;
-        dispatch(setCalculationValues({calculation:"fourpoint", values: tempPoints }));
-    } */
+/*}
+{(refresh) ? 
+(<><label>Loading charts...</label></>) 
+: }*/
