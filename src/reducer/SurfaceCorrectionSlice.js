@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { median, roundToX } from "../common/common";
+import { median } from "../common/common";
 
 export const SurfaceCorrectionSlice = createSlice({
     name:'laserData',
@@ -53,10 +53,10 @@ export const SurfaceCorrectionSlice = createSlice({
                     x:data[i].x,
                     //yMedian: data[i].yMedian,
                     //yLinear: yLinear,
-                    yCorr:roundToX(yLinear - data[i].yMedian, 0),
+                    yCorr: yLinear - data[i].yMedian,
                     //zMedian: data[i].zMedian,
                     //zLinear: zLinear,
-                    zCorr:roundToX(zLinear - data[i].zMedian, 0)
+                    zCorr: zLinear - data[i].zMedian
                 })
             }
 

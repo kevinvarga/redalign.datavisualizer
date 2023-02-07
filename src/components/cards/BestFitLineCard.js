@@ -62,16 +62,20 @@ export default function BestFitLineCard(props){
                                     value={tabValue}
                                     onChange={handleTabChange}
                                 >
-                                    <Tab label="Calculations" />
                                     <Tab label="Edit Points" />
+                                    <Tab label="Calculations" />
                                 </Tabs>
                             </Box>
 
                             <Box sx={{display: isVisible(0)}}>
-                                <CalculationPanel result={result} />
+                                <BestFitLineGraph 
+                                    display={isVisible(0)} 
+                                    laserData={laserData} 
+                                    points={points} 
+                                />
                             </Box>
                             <Box sx={{display: isVisible(1)}} >
-                                <BestFitLineGraph laserData={laserData} points={points} />
+                                <CalculationPanel result={result} />
                             </Box>
                         </Box>        
                     </AccordionSummary>

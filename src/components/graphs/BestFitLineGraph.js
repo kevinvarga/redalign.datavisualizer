@@ -15,17 +15,19 @@ export default function BestFitLineGraph(props) {
     const canvasBFLRefMotorZ = useRef();
     const dispatch = useDispatch();
     const [refresh, setRefresh] = useState(true);
-    
+    const display = props.display ?? true;
     bflLaserData =  props.laserData; 
     bflPoints = props.points; 
 
     useEffect(() => {
-        if(refresh) {
+        if(display && !refresh) {
+            setRefresh(true);
+        } else if(refresh) {
             window.setTimeout(() => {
                 setRefresh(false);
             }, 100);
         }
-    }, [refresh])
+    }, [display, refresh])
 
     const isSelectedPoint = (ctx) => {
         const index = ctx.dataIndex;
@@ -122,8 +124,8 @@ export default function BestFitLineGraph(props) {
     return (
         <Box>
             {(refresh) ? 
-            (<><label>loading...</label></>):
-            (
+            (<><label>Loading charts...</label></>) 
+            : (
                 <>
                     <Grid
                         container
