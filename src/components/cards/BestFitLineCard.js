@@ -9,11 +9,11 @@ import BestFitLineGraph from "../graphs/BestFitLineGraph";
 import { ExpandMore } from "@mui/icons-material";
 
 export default function BestFitLineCard(props){
+    const [tabValue, setTabValue] = useState(0);
     const {laserData, reset} = props;
     const dispatch = useDispatch();
-    const [tabValue, setTabValue] = useState(0);
 
-    useEffect(() => {
+    useEffect(() => {   
         if(reset) {
             setTabValue(0);
         }
@@ -49,7 +49,7 @@ export default function BestFitLineCard(props){
         let result = bfl.calculate();
         return (
             <>
-                <Accordion>
+                <Accordion defaultExpanded={true} >
                     <AccordionSummary
                         expandIcon={<ExpandMore />}
                     >

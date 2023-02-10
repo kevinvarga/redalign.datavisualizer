@@ -6,7 +6,7 @@ import { setCalculationValues } from "../../reducer/LaserDataSlice";
 import "./FourPointGraph.css";
 import ScatterGraph from "./ScatterGraph";
 let bflLaserData;
-let bflPoints; // needs to be outside function for scoping issue with grid events.
+let bflPoints; // needs to be outside the function for scoping issue with grid events.
 
 export default function BestFitLineGraph(props) {
     const canvasBFLRefPumpY = useRef();
@@ -19,7 +19,7 @@ export default function BestFitLineGraph(props) {
     const reset = props.reset;
     bflLaserData =  props.laserData; 
     bflPoints = props.points; 
-
+    
     useEffect(() => {
         if(display && !refresh) {
             setRefresh(true);
@@ -194,7 +194,3 @@ export default function BestFitLineGraph(props) {
         </Box>
     )
 }
-/*}
-{(refresh) ? 
-(<><label>Loading charts...</label></>) 
-: }*/

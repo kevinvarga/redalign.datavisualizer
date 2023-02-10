@@ -7,7 +7,7 @@ import SelectedPoints from "../cards/SelectedPoints";
 import "./FourPointGraph.css";
 import ScatterGraph from "./ScatterGraph";
 let laserData;
-let points; // needs to be outside function for scoping issue with grid events.
+let points; // needs to be outside the function for scoping issue with grid events.
 
 export default function FourPointGraph(props) {
     const canvasRefPumpY = useRef();
