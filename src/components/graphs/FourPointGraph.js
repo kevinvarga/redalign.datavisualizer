@@ -16,18 +16,21 @@ export default function FourPointGraph(props) {
     const canvasRefMotorZ = useRef();
     const dispatch = useDispatch();
     const [refresh, setRefresh] = useState(true);
+    const display = props.display ?? true;
     const result = props.result;
 
     laserData =  props.laserData; //useSelector((state) => state.laserData);
     points = laserData.calculation.fourpoint; 
 
     useEffect(() => {
-        if(refresh) {
+        if(display && !refresh) {
+            setRefresh(true);
+        } else if(refresh) {
             window.setTimeout(() => {
                 setRefresh(false);
-            }, 100);
+            }, 1000);
         }
-    }, [refresh])
+    }, [display, refresh])
 
     const isSelectedPoint = (ctx) => {
         const index = ctx.dataIndex;
@@ -141,9 +144,6 @@ export default function FourPointGraph(props) {
 
     return (
         <Box>
-            {(refresh) ? 
-            (<><label>loading...</label></>):
-            (
                 <>
                     {renderPoints()}
                     <Grid
@@ -236,14 +236,6 @@ export default function FourPointGraph(props) {
                         </Box>
                     </Grid>
                 </>
-            )}
         </Box>
     )
 }
-
-/*
-                    <LaserPoint title="Pump 1" point={result.pump1} />
-                    <LaserPoint title="Pump 2" point={result.pump2} />            
-                    <LaserPoint title="Motor 1" point={result.motor1} />
-                    <LaserPoint title="Motor 2" point={result.motor2} />
-*/

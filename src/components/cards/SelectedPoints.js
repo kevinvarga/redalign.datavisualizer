@@ -1,5 +1,6 @@
 import { Box, Grid } from "@mui/material";
 import React from "react";
+import { roundToX } from "../../common/common";
 import "./SelectedPoints.css";
 
 export default function SelectedPoints(props) {
@@ -32,20 +33,20 @@ export default function SelectedPoints(props) {
             direction="row"
             >
                 <Box className="four-point-column four-point-label">Y</Box>
-                <Box className="four-point-column four-point-value">{result.pump1.y}</Box>
-                <Box className="four-point-column four-point-value">{result.pump2.y}</Box>
-                <Box className="four-point-column four-point-value">{result.motor1.y}</Box>
-                <Box className="four-point-column four-point-value">{result.motor2.y}</Box>
+                <Box className="four-point-column four-point-value">{roundToX(result.pump1.y, 0)}</Box>
+                <Box className="four-point-column four-point-value">{roundToX(result.pump2.y,0)}</Box>
+                <Box className="four-point-column four-point-value">{roundToX(result.motor1.y,0)}</Box>
+                <Box className="four-point-column four-point-value">{roundToX(result.motor2.y,0)}</Box>
             </Grid>
             <Grid
             container
             direction="row"
             >
                 <Box className="four-point-column four-point-label">Z</Box>
-                <Box className="four-point-column four-point-value">{result.pump1.z}</Box>
-                <Box className="four-point-column four-point-value">{result.pump2.z}</Box>
-                <Box className="four-point-column four-point-value">{result.motor1.z}</Box>
-                <Box className="four-point-column four-point-value">{result.motor2.z}</Box>
+                <Box className="four-point-column four-point-value">{roundToX(result.pump1.z,0)}</Box>
+                <Box className="four-point-column four-point-value">{roundToX(result.pump2.z,0)}</Box>
+                <Box className="four-point-column four-point-value">{roundToX(result.motor1.z,0)}</Box>
+                <Box className="four-point-column four-point-value">{roundToX(result.motor2.z,0)}</Box>
             </Grid>
         </Box>
     );
