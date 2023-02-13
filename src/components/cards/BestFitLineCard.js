@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Box, Tabs, Tab, Accordion, AccordionSummary } from "@mui/material";
+import { Box, Tabs, Tab, Accordion, AccordionSummary, AccordionDetails } from "@mui/material";
 import BestFitLine from "../calculations/BestFitLine";
 import ShimPanel from "./ShimPanel";
 import CalculationPanel from "./CalculationPanel";
@@ -55,8 +55,9 @@ export default function BestFitLineCard(props){
                     >
                         <ShimPanel title="Best Fit Line" result={result} />
                     </AccordionSummary>
-                    <AccordionSummary>
-                        <Box sx={{width:"100%", height: "525px"}}>
+                    <AccordionDetails>
+
+                        <Box sx={{width:"100%", flexGrow: "1"}}>
                             <Box sx={{paddingBottom: "3px"}}>
                                 <Tabs
                                     value={tabValue}
@@ -79,7 +80,7 @@ export default function BestFitLineCard(props){
                                 <CalculationPanel result={result} />
                             </Box>
                         </Box>        
-                    </AccordionSummary>
+                    </AccordionDetails>
                 </Accordion>
             </>
         )

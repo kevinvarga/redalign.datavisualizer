@@ -4,10 +4,12 @@ const initialState = {
     allValues: [],
     YValues: [],
     ZValues: [],
+    RadiusValues: [],
     rangeY: {pump: [], motor: []},
     rangeZ: {pump: [], motor: []},
-    minXYZ: {x:0,y:0,z:0},
-    maxXYZ: {x:0,y:0,z:0},
+    rangeRadius: {pump: [], motor: []},
+    minXYZ: {x:0,y:0,z:0,r:0},
+    maxXYZ: {x:0,y:0,z:0,r:0},
     calculation: {},
     isSurfaceCorrected: false
 }
@@ -21,6 +23,7 @@ export const LaserDataSlice = createSlice({
             tempState.allValues = action.payload.rawData;
             tempState.rangeY = {pump: [], motor: []};
             tempState.rangeZ = {pump: [], motor: []};
+            tempState.rangeRadius = {pump: [], motor: []};
 
             let surfaceCorr = action.payload.surfaceCorrection;
             tempState.isSurfaceCorrected = (surfaceCorr !== null);
@@ -37,14 +40,17 @@ export const LaserDataSlice = createSlice({
                 
                 tempState.YValues.push({x:data.x,y:data.y,r:data.r, index: i});
                 tempState.ZValues.push({x:data.x,y:data.z,r:data.r, index: i});
+                tempState.RadiusValues.push({x:data.x,y:data.r,r:data.r, index:i});
 
                 tempState.minXYZ.x = (tempState.minXYZ.x === 0) ? data.x : tempState.minXYZ.x;
                 tempState.minXYZ.y = (tempState.minXYZ.y > data.y) ? data.y : tempState.minXYZ.y;
                 tempState.minXYZ.z = (tempState.minXYZ.z > data.z) ? data.z : tempState.minXYZ.z;
-                
+                tempState.minXYZ.r = (tempState.minXYZ.r > data.r) ? data.r : tempState.minXYZ.r;
+
                 tempState.maxXYZ.x = (tempState.maxXYZ.x < data.x) ? data.x : tempState.maxXYZ.x;
                 tempState.maxXYZ.y = (tempState.maxXYZ.y < data.y ) ? data.y : tempState.maxXYZ.y;
                 tempState.maxXYZ.z = (tempState.maxXYZ.z < data.z ) ? data.z : tempState.maxXYZ.z;
+                tempState.minXYZ.r = (tempState.minXYZ.r < data.r) ? data.r : tempState.minXYZ.r;
             }
 
             return tempState;
@@ -56,11 +62,13 @@ export const LaserDataSlice = createSlice({
             if(action.payload.startX < midPoint) {
                 state.rangeY.pump = [];
                 state.rangeZ.pump = [];
+                state.rangeRadius.pump = [];
             }
 
             if(action.payload.endX > midPoint) {
                 state.rangeY.motor = [];
                 state.rangeZ.motor = [];
+                state.rangeRadius.motor = [];
             }
             
             // X value < midpoint => pump values
@@ -71,6 +79,7 @@ export const LaserDataSlice = createSlice({
                     let dataType = state.YValues[i].x < midPoint ? "pump" : "motor";
                     state.rangeY[dataType].push({...state.YValues[i]});
                     state.rangeZ[dataType].push({...state.ZValues[i]});
+                    state.rangeRadius[dataType].push({...state.RadiusValues[i]});
                 }
             }
             state.calculation = {};

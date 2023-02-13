@@ -13,6 +13,8 @@ export default function BestFitLineGraph(props) {
     const canvasBFLRefMotorY = useRef();
     const canvasBFLRefPumpZ = useRef();
     const canvasBFLRefMotorZ = useRef();
+    const canvasBFLRefPumpRadius = useRef();
+    const canvasBFLRefMotorRadius = useRef();
     const dispatch = useDispatch();
     const [refresh, setRefresh] = useState(true);
     const display = props.display ?? true;
@@ -114,7 +116,7 @@ export default function BestFitLineGraph(props) {
                         backgroundColor: activePointColor,
                         borderColor: activePointColor,
                         pointStyle: activePointStyle,
-                        radius: activePointRadius,
+                        radius: activePointRadius, // radius of point displayed
                     }
                 },
                 onClick: handleChartClick,
@@ -186,6 +188,37 @@ export default function BestFitLineGraph(props) {
                                 data-type="motor"
                             />}
                             options={graphOptions("Motor Z")}
+                        />
+                    </Box>
+                </Grid>
+                <Grid
+                    container
+                    direction="row"
+                >
+                    <Box className="fp-chart-container" >
+                        <ScatterGraph 
+                            data={[bflLaserData.rangeRadius.pump]}
+                            content={
+                            <canvas 
+                                id="pumpRadius" 
+                                ref={canvasBFLRefPumpRadius} 
+                                className="graph-canvas"
+                                data-type="pump"
+                            />}
+                            options={graphOptions("Pump Radius")}
+                        />
+                    </Box>
+                    <Box className="fp-chart-container" >
+                        <ScatterGraph 
+                            data={[bflLaserData.rangeRadius.motor]}
+                            content={
+                            <canvas 
+                                id="motorRadius" 
+                                ref={canvasBFLRefMotorRadius} 
+                                className="graph-canvas"
+                                data-type="motor"
+                            />}
+                            options={graphOptions("Motor Radius")}
                         />
                     </Box>
                 </Grid>
