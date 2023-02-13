@@ -160,7 +160,7 @@ export default function FourPointGraph(props) {
                                     className="graph-canvas"
                                     data-type="pump"
                                 />}
-                                options={graphOptions("Pump Y")}
+                                options={graphOptions("Pump Vertical")}
                             />
                         </Box>
                         <Box className="fp-chart-container" >
@@ -173,7 +173,7 @@ export default function FourPointGraph(props) {
                                     className="graph-canvas"
                                     data-type="motor"
                                 />}
-                                options={graphOptions("Motor Y")}
+                                options={graphOptions("Motor Vertical")}
                             />
                         </Box>
                     </Grid>
@@ -191,7 +191,7 @@ export default function FourPointGraph(props) {
                                     className="graph-canvas"
                                     data-type="pump"
                                 />}
-                                options={graphOptions("Pump Z")}
+                                options={graphOptions("Pump Horizon")}
                             />
                         </Box>
                         <Box className="fp-chart-container" >
@@ -204,7 +204,7 @@ export default function FourPointGraph(props) {
                                     className="graph-canvas"
                                     data-type="motor"
                                 />}
-                                options={graphOptions("Motor Z")}
+                                options={graphOptions("Motor Horizon")}
                             />
                         </Box>
                     </Grid>

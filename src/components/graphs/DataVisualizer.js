@@ -75,7 +75,7 @@ export default function DataVisualizer(props) {
                         ref={canvasRefXY} 
                         className="graph-canvas"
                     />}
-                    options={graphOptions("Y Values", false)}
+                    options={graphOptions("Vertical Values", false)}
                 />
             </Box>
             <Box className="chart-container" >
@@ -90,7 +90,7 @@ export default function DataVisualizer(props) {
                             ref={canvasRefXZ} 
                             className="graph-canvas"
                         />}
-                        options={graphOptions("Z Values", true, "bottom")}
+                        options={graphOptions("Horizon Values", true, "bottom")}
                     />
             </Box>
         </Box>
