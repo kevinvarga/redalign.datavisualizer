@@ -19,14 +19,9 @@ const handleSubscribe = () => {
     previousState = undefined;
   } else {
       if (previousState !== currentState) {
-        let saveState = false;
-        // only save state when the state is updated
-        if(previousState && (Object.keys(previousState).length > 0)) {
-            saveState = true;
-        }
-    
         previousState = currentState;
-        if(saveState) {
+
+        if(Object.keys(previousState).length > 0) {
             saving = true;
             clearTimeout(uploadTimeout);
             uploadTimeout = setTimeout(() => {
