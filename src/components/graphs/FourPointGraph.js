@@ -2,7 +2,7 @@ import { Grid, ToggleButton, ToggleButtonGroup } from "@mui/material";
 import { Box } from "@mui/system";
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
-import { setCalculationValues } from "../../reducer/LaserDataSlice";
+import { setAlgorithmValues } from "../../reducer/LaserDataSlice";
 import SelectedPoints from "../cards/SelectedPoints";
 import "./FourPointGraph.css";
 import ScatterGraph from "./ScatterGraph";
@@ -20,7 +20,7 @@ export default function FourPointGraph(props) {
     const result = props.result;
 
     laserData =  props.laserData; //useSelector((state) => state.laserData);
-    points = laserData.calculation.fourpoint; 
+    points = laserData.algorithm.fourpoint; 
 
     useEffect(() => {
         if(display && !refresh) {
@@ -66,20 +66,20 @@ export default function FourPointGraph(props) {
             let editPoint = (dataType === "pump") ? points.edit.pump : points.edit.motor;
             let tempPoints = JSON.parse(JSON.stringify(points));
             tempPoints[dataType][editPoint] = elements[0].index;
-            dispatch(setCalculationValues({calculation:"fourpoint", values: tempPoints }));
+            dispatch(setAlgorithmValues({algorithm:"fourpoint", values: tempPoints }));
         }
     }
 
     const handlePumpToggle = (event) => {
         let tempPoints = JSON.parse(JSON.stringify(points));
         tempPoints.edit.pump = event.target.value;
-        dispatch(setCalculationValues({calculation:"fourpoint", values: tempPoints }));
+        dispatch(setAlgorithmValues({algorithm:"fourpoint", values: tempPoints }));
     }
 
     const handleMotorToggle = (event) => {
         let tempPoints = JSON.parse(JSON.stringify(points));
         tempPoints.edit.motor = event.target.value;
-        dispatch(setCalculationValues({calculation:"fourpoint", values: tempPoints }));
+        dispatch(setAlgorithmValues({algorithm:"fourpoint", values: tempPoints }));
     }
 
     const graphOptions = (title) => {

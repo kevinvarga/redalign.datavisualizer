@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { median } from "../common/common";
 
 export const SurfaceCorrectionSlice = createSlice({
-    name:'laserData',
+    name:'surfaceCorrection',
     initialState: {
         corrections: []
     },

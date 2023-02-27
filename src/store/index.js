@@ -1,10 +1,12 @@
 import { configureStore } from '@reduxjs/toolkit'
 import laserDataReducer from '../reducer/LaserDataSlice';
-import surfaceCorrecctionReducer from "../reducer/SurfaceCorrectionSlice";
+import surfaceCorrectionReducer from "../reducer/SurfaceCorrectionSlice";
+import scansReducer from "../reducer/Scans";
 
 export default configureStore({
   reducer: {
     laserData: laserDataReducer,
-    surfaceCorrection: surfaceCorrecctionReducer
+    surfaceCorrection: surfaceCorrectionReducer,
+    scans: scansReducer,
   },
 })

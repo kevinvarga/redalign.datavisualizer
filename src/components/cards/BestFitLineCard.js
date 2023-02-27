@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Box, Tabs, Tab, Accordion, AccordionSummary, AccordionDetails } from "@mui/material";
-import BestFitLine from "../calculations/BestFitLine";
 import ShimPanel from "./ShimPanel";
 import CalculationPanel from "./CalculationPanel";
 import { useDispatch } from "react-redux";
-import { setCalculationValues } from "../../reducer/LaserDataSlice";
+import { setAlgorithmValues } from "../../reducer/LaserDataSlice";
 import BestFitLineGraph from "../graphs/BestFitLineGraph";
-import { ExpandMore } from "@mui/icons-material";
+import { ExpandMore, Label } from "@mui/icons-material";
 
 export default function BestFitLineCard(props){
     const [tabValue, setTabValue] = useState(0);
@@ -29,12 +28,12 @@ export default function BestFitLineCard(props){
 
     const formatResult = () => {
 
-        let points;
+        let bfl;
 
-        if(laserData.calculation.bestfitline) {
-            points = laserData.calculation.bestfitline;
+        if(laserData.algorithm.bestfitline) {
+            bfl = laserData.algorithm.bestfitline;
         } else {
-            points = {
+            let points = {
                 pump: {
                     exclude: []
                 },
@@ -42,48 +41,55 @@ export default function BestFitLineCard(props){
                     exclude: []
                 }
             }
-            dispatch(setCalculationValues({calculation:"bestfitline", values:points}));
+            dispatch(setAlgorithmValues({algorithm:"bestfitline", values:points}));
         }
 
-        let bfl = new BestFitLine(laserData);
-        let result = bfl.calculate();
-        return (
-            <>
-                <Accordion defaultExpanded={true} >
-                    <AccordionSummary
-                        expandIcon={<ExpandMore />}
-                    >
-                        <ShimPanel title="Best Fit Line" result={result} />
-                    </AccordionSummary>
-                    <AccordionDetails>
+        if(!bfl){
+            return (
+                <Label>
+                    Calculating shims values...
+                </Label>
+            )
+        } else {
 
-                        <Box sx={{width:"100%", flexGrow: "1"}}>
-                            <Box sx={{paddingBottom: "3px"}}>
-                                <Tabs
-                                    value={tabValue}
-                                    onChange={handleTabChange}
-                                >
-                                    <Tab label="Edit Points" />
-                                    <Tab label="Calculations" />
-                                </Tabs>
-                            </Box>
-
-                            <Box sx={{display: isVisible(0)}}>
-                                <BestFitLineGraph 
-                                    reset={reset}
-                                    display={isVisible(0)} 
-                                    laserData={laserData} 
-                                    points={points} 
-                                />
-                            </Box>
-                            <Box sx={{display: isVisible(1)}} >
-                                <CalculationPanel result={result} />
-                            </Box>
-                        </Box>        
-                    </AccordionDetails>
-                </Accordion>
-            </>
-        )
+            return (
+                <>
+                    <Accordion defaultExpanded={true} >
+                        <AccordionSummary
+                            expandIcon={<ExpandMore />}
+                        >
+                            <ShimPanel title="Best Fit Line" result={bfl.result} />
+                        </AccordionSummary>
+                        <AccordionDetails>
+    
+                            <Box sx={{width:"100%", flexGrow: "1"}}>
+                                <Box sx={{paddingBottom: "3px"}}>
+                                    <Tabs
+                                        value={tabValue}
+                                        onChange={handleTabChange}
+                                    >
+                                        <Tab label="Edit Points" />
+                                        <Tab label="Calculations" />
+                                    </Tabs>
+                                </Box>
+    
+                                <Box sx={{display: isVisible(0)}}>
+                                    <BestFitLineGraph 
+                                        reset={reset}
+                                        display={isVisible(0)} 
+                                        laserData={laserData} 
+                                        points={bfl} 
+                                    />
+                                </Box>
+                                <Box sx={{display: isVisible(1)}} >
+                                    <CalculationPanel result={bfl.result} />
+                                </Box>
+                            </Box>        
+                        </AccordionDetails>
+                    </Accordion>
+                </>
+            )
+        }
     }
 
     return(

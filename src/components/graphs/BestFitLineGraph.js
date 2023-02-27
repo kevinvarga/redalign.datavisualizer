@@ -2,7 +2,7 @@ import { Grid } from "@mui/material";
 import { Box } from "@mui/system";
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
-import { setCalculationValues } from "../../reducer/LaserDataSlice";
+import { setAlgorithmValues } from "../../reducer/LaserDataSlice";
 import "./FourPointGraph.css";
 import ScatterGraph from "./ScatterGraph";
 let bflLaserData;
@@ -72,7 +72,7 @@ export default function BestFitLineGraph(props) {
                 tempExcluded[dataType].exclude.splice(excludeIndex, 1);
             }            
             
-            dispatch(setCalculationValues({calculation:"bestfitline", values: tempExcluded }));
+            dispatch(setAlgorithmValues({algorithm:"bestfitline", values: tempExcluded }));
         }
     }
 

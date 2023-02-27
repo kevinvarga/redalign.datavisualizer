@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { loadData } from '../reducer/LaserDataSlice.js';
 import Calibration from './Calibration.js';
+import DataWatcher from './data/DataWatcher.js';
 
 
 export default function DataImport(props) {
@@ -24,11 +25,21 @@ export default function DataImport(props) {
           
           if(line[1] !== '' && !isNaN(line[0]) && !isNaN(line[1]) && !isNaN(line[2]) && !isNaN(line[3])) {
             
-            data.push({x:Number(line[0]),y:Number(line[1]),z:Number(line[2]),r:Number(line[3])});
+            data.push({x:Number(line[0]),y:Number(line[1]),z:Number(line[2]),radius:Number(line[3])});
           }
         }
 
         dispatch(loadData({rawData:data, surfaceCorrection:corrections}));
+        if(onLoaded){
+            onLoaded();
+        }
+    }
+
+    const handleDownloaded = (id, data) => {
+        dispatch(loadData({id:id, 
+                            rawData:data.measurements,
+                            state: data.state ?? undefined, 
+                            surfaceCorrection:corrections}));
         if(onLoaded){
             onLoaded();
         }
@@ -51,6 +62,12 @@ export default function DataImport(props) {
         }
     };
 
+    const handleDataAvailable = () => {
+        if(onFileSelected) {
+            onFileSelected();
+        }
+    }
+
     return (
         <Grid container
             direction="row"
@@ -64,7 +81,7 @@ export default function DataImport(props) {
                 <Button
                     variant="contained"
                     component="label"
-                    
+                    sx={{display:"none"}}
                 >
                     Load Data File
                     <input
@@ -79,7 +96,10 @@ export default function DataImport(props) {
                 (<Box component="span" sx={{padding:'5px', color:"white"}} >{fileName}</Box>)
                 : 
                 (<></>)}
-                
+                <DataWatcher
+                    onDataAvailable={handleDataAvailable}
+                    onDownloaded={handleDownloaded} 
+                />
             </Box>
             <Box sx={{visibility:"hidden"}} >
                 <Button 

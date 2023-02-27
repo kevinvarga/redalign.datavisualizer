@@ -1,5 +1,3 @@
-//import { eigs } from "mathjs";
-
 import { roundToX } from "../../common/common";
 import ShimValues from "./ShimValues";
 
@@ -102,9 +100,9 @@ export default class BestFitLine  {
             // to get the first and last index of the pump/motor range use either rangeY or rangeZ can be used since they contains the same number of values
             let pumpExclude = [];
             let motorExclude = [];
-            if ((this.laserData.calculation) && (this.laserData.calculation.bestfitline)) {
-                pumpExclude = this.getExcludedPoints(this.laserData.rangeY.pump, this.laserData.calculation.bestfitline.pump.exclude); 
-                motorExclude = this.getExcludedPoints(this.laserData.rangeY.motor, this.laserData.calculation.bestfitline.motor.exclude);
+            if ((this.laserData.algorithm) && (this.laserData.algorithm.bestfitline)) {
+                pumpExclude = this.getExcludedPoints(this.laserData.rangeY.pump, this.laserData.algorithm.bestfitline.pump.exclude); 
+                motorExclude = this.getExcludedPoints(this.laserData.rangeY.motor, this.laserData.algorithm.bestfitline.motor.exclude);
             }
             
             let pumpData = this.getData(this.laserData.rangeY.pump[0].index, this.laserData.rangeY.pump[this.laserData.rangeY.pump.length - 1].index, pumpExclude);

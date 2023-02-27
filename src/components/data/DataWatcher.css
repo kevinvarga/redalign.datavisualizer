@@ -1,0 +1,10 @@
+.watcher-icon {
+    color:white;
+    font-size: xx-large;
+}
+
+.watcher-auto-save {
+    display: inline-block;
+    color:white;
+    min-width: 45px;
+}

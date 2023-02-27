@@ -2,9 +2,9 @@ import { roundToX } from "../../common/common";
 import ShimValues from "./ShimValues";
 
 export default class FourPoint {
-    constructor(ld, points) {
+    constructor(ld) {
         this.laserData = ld;
-        this.points = points;
+        this.points = ld.algorithm.fourpoint;
     }
 
     calcSlope = (x1, y1, x2, y2) => {

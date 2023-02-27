@@ -1,8 +1,7 @@
 import { Box, Tabs, Tab, Accordion, AccordionSummary, AccordionDetails } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { setCalculationValues } from "../../reducer/LaserDataSlice";
-import FourPoint from "../calculations/FourPoint";
+import { setAlgorithmValues } from "../../reducer/LaserDataSlice";
 import FourPointGraph from "../graphs/FourPointGraph";
 import ShimPanel from "./ShimPanel";
 import CalculationPanel from "./CalculationPanel";
@@ -13,8 +12,6 @@ export default function FourPointCard(props) {
     const dispatch = useDispatch();
     const [tabValue, setTabValue] = useState(0);
 
-    let points;
-    let result;
     let fp;
 
     useEffect(() => {
@@ -33,10 +30,10 @@ export default function FourPointCard(props) {
 
     const formatResult = () => {
 
-        if(laserData.calculation.fourpoint) {
-            points = laserData.calculation.fourpoint;
+        if(laserData.algorithm.fourpoint) {
+            fp = laserData.algorithm.fourpoint;
         } else {
-            points = {
+            let points = {
                 pump: {
                     start: 0,
                     end: laserData.rangeY.pump.length - 1,
@@ -50,47 +47,54 @@ export default function FourPointCard(props) {
                     motor: "start"
                 }
             }
-            dispatch(setCalculationValues({calculation:"fourpoint", values:points}));
+            dispatch(setAlgorithmValues({algorithm:"fourpoint", values:points}));
         }
     
-        fp = new FourPoint(laserData, points);
-        result = fp.calculate();
-        
-        return(
-            <>
+        if(!fp){
+            return (
                 <Accordion>
-                    <AccordionSummary
-                        expandIcon={<ExpandMore />}    
-                    >
-                        <ShimPanel title="Four Point" result={result} />
+                    <AccordionSummary>
+                        Calculating shims values...
                     </AccordionSummary>
-                    <AccordionDetails>
-                        <Box sx={{width:"100%", height: "555px"}}>
-                            <Box sx={{paddingBottom: "3px"}}>
-                                <Tabs
-                                    value={tabValue}
-                                    onChange={handleTabChange}
-                                >
-                                    <Tab label="Edit Points" />
-                                    <Tab label="Calculations" />
-                                </Tabs>
-                            </Box>
-
-                            <Box sx={{display: isVisible(0)}}>
-                                <FourPointGraph 
-                                    reset={reset}
-                                    result={result} 
-                                    laserData={laserData} 
-                                />
-                            </Box>
-                            <Box sx={{display: isVisible(1)}} >
-                                <CalculationPanel result={result} />
-                            </Box>  
-                        </Box>
-                    </AccordionDetails>
                 </Accordion>
-            </>
-        )
+            )
+        } else {
+            return(
+                <>
+                    <Accordion>
+                        <AccordionSummary
+                            expandIcon={<ExpandMore />}    
+                        >
+                            <ShimPanel title="Four Point" result={fp.result} />
+                        </AccordionSummary>
+                        <AccordionDetails>
+                            <Box sx={{width:"100%", height: "555px"}}>
+                                <Box sx={{paddingBottom: "3px"}}>
+                                    <Tabs
+                                        value={tabValue}
+                                        onChange={handleTabChange}
+                                    >
+                                        <Tab label="Edit Points" />
+                                        <Tab label="Calculations" />
+                                    </Tabs>
+                                </Box>
+    
+                                <Box sx={{display: isVisible(0)}}>
+                                    <FourPointGraph 
+                                        reset={reset}
+                                        result={fp.result} 
+                                        laserData={laserData} 
+                                    />
+                                </Box>
+                                <Box sx={{display: isVisible(1)}} >
+                                    <CalculationPanel result={fp.result} />
+                                </Box>  
+                            </Box>
+                        </AccordionDetails>
+                    </Accordion>
+                </>
+            )
+        }
     }
 
     return(

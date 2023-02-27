@@ -14,3 +14,9 @@ export const median = (arr) => {
       (arr[midpoint - 1] + arr[midpoint]) / 2; // 3.2. If even length, take median of midpoints
     return median;
 }
+
+export const pad = (num, size) => {
+  num = num.toString();
+  while (num.length < size) num = "0" + num;
+  return num;
+}
