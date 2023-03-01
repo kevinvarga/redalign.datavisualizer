@@ -41,7 +41,7 @@ function App() {
     return (
       <Box sx={{padding:"50px"}}>
         <Typography variant='h4'>Data Visualizer</Typography>
-        <Typography variant='h6'>Click the LOAD DATA FILE button to load a TSV file from Marshall's program</Typography>
+        <Typography variant='h6'>Click the Drafting Compass icon to load data from Marshall's program</Typography>
       </Box>
     )
   }
