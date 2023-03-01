@@ -90,7 +90,7 @@ export default function DataVisualizer(props) {
                             ref={canvasRefXZ} 
                             className="graph-canvas"
                         />}
-                        options={graphOptions("Horizon Values", true, "bottom")}
+                        options={graphOptions("Horizontal Values", true, "bottom")}
                     />
             </Box>
         </Box>

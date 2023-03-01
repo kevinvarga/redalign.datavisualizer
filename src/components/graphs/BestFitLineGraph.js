@@ -174,7 +174,7 @@ export default function BestFitLineGraph(props) {
                                 className="graph-canvas"
                                 data-type="pump"
                             />}
-                            options={graphOptions("Pump Horizon")}
+                            options={graphOptions("Pump Horizontal")}
                         />
                     </Box>
                     <Box className="fp-chart-container" >
@@ -187,7 +187,7 @@ export default function BestFitLineGraph(props) {
                                 className="graph-canvas"
                                 data-type="motor"
                             />}
-                            options={graphOptions("Motor Horizon")}
+                            options={graphOptions("Motor Horizontal")}
                         />
                     </Box>
                 </Grid>
