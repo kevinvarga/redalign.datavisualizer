@@ -90,8 +90,13 @@ export default class BestFitLine  {
     getExcludedPoints = (range, exclude) => {
         let skip = [];
         for(let i=0; i<exclude.length;i++){
-            skip.push({...range[exclude[i]]}); // push a copy of the point to exclude from the calculation
+            // the exclude array is a list of x values to exclude
+            let index = range.findIndex(r => r.x === exclude[i]);
+            if(index !== -1) { // it is possible that an excluded value doesn't exist due to noise reduction
+                skip.push({...range[index]}); // push a copy of the point to exclude from the calculation
+            }
         }
+
         return skip;
     }
 

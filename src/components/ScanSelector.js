@@ -1,7 +1,7 @@
 import { Dialog, DialogActions, DialogTitle, List, ListItem, ListItemButton, ListItemText, Pagination } from "@mui/material";
 import React, { useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { pad, roundToX } from "../common/common";
+import { formatDate, roundToX } from "../common/common";
 import { showScans } from "../reducer/Scans";
 
 export default function ScanSelector(props) {
@@ -13,20 +13,6 @@ export default function ScanSelector(props) {
 
     const handleClose = (evt) => {
         dispatch(showScans(false));    
-    }
-
-    const formatDate = (date) => {
-        let scanDate = new Date(date);
-        let hours = scanDate.getHours();
-        let amPM = "AM";
-        
-        if(hours === 0) {
-            hours = 12;
-        } else if((hours - 12) > 0) {
-            hours -= 12; 
-            amPM = "PM";
-        } 
-        return `${scanDate.getMonth() + 1}/${scanDate.getDate()} @ ${hours}:${pad(scanDate.getMinutes(), 2)} ${amPM}`;
     }
 
     const handlePageChange = (evt, newPage) => {

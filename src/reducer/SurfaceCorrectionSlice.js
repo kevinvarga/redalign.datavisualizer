@@ -43,31 +43,14 @@ export const SurfaceCorrectionSlice = createSlice({
             for(let i=0;i<data.length;i++) {
                 let yLinear = data[0].yMedian + (data[i].x * yStep);
                 let zLinear = data[0].zMedian + (data[i].x * zStep); 
-                /*
-                if(data[i].x === 496000){
-                    console.log(`yMedian: ${data[i].yMedian}; yLinear: ${yLinear}; zMedian: ${data[i].zMedian}; zLinear: ${zLinear}`);
-                }
-                */
 
                 tempCorrections.push({
                     x:data[i].x,
-                    //yMedian: data[i].yMedian,
-                    //yLinear: yLinear,
                     yCorr: yLinear - data[i].yMedian,
-                    //zMedian: data[i].zMedian,
-                    //zLinear: zLinear,
                     zCorr: zLinear - data[i].zMedian
                 })
             }
 
-            /*
-            let output = "";
-            for(let i=0;i<tempCorrections.length;i++){
-                output += `${tempCorrections[i].x}\t${tempCorrections[i].yCorr}\t${tempCorrections[i].zCorr}\n`;
-            }
-            console.log(output);
-            */
-            //console.log(tempCorrections);
             state.corrections = tempCorrections
         }
     }

@@ -12,7 +12,7 @@ export default function CalculatedValue(props) {
             direction="row"
         >
             <Box className="calculated-value-title" >{title}</Box>
-            <Box className="calculated-value">{roundToX(calcValue.value, 5)} {(calcValue.converted) ? (`(${roundToX(calcValue.converted, 3)}")`) : ("")}</Box>
+            <Box className="calculated-value">{roundToX(calcValue.value, 5)} {(calcValue.converted) ? (`(${roundToX(calcValue.converted, 3).toFixed(3)}")`) : ("")}</Box>
             <Box className="calculated-value-formula">{calcValue.formula}</Box>
         </Grid>
     );

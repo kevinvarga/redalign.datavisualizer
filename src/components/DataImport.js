@@ -37,6 +37,7 @@ export default function DataImport(props) {
 
     const handleDownloaded = (id, data) => {
         dispatch(loadData({id:id, 
+                            endDate:data.end,
                             rawData:data.measurements,
                             state: data.state ?? undefined, 
                             surfaceCorrection:corrections}));

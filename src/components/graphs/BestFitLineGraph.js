@@ -35,12 +35,13 @@ export default function BestFitLineGraph(props) {
     const isSelectedPoint = (ctx) => {
         const index = ctx.dataIndex;
         const dataType = ctx.chart.canvas.dataset.type;
-        
-        if(bflPoints) {
+        const dataPoint = ctx.chart.data.datasets[0].data[index];
+
+        if(bflPoints && dataPoint) {
             if(dataType === "pump") {
-                return (bflPoints.pump.exclude.indexOf(index) !== -1);
+                return (bflPoints.pump.exclude.findIndex(e => (e === dataPoint.x)) !== -1);
             } else {
-                return (bflPoints.motor.exclude.indexOf(index) !== -1);
+                return (bflPoints.motor.exclude.findIndex(e => (e === dataPoint.x)) !== -1);
             }
         } else {
             return false;
@@ -64,10 +65,11 @@ export default function BestFitLineGraph(props) {
         if(bflPoints && elements.length > 0) {
             const dataType = evt.chart.canvas.dataset.type;
             let tempExcluded = JSON.parse(JSON.stringify(bflPoints));
-            let excludeIndex = tempExcluded[dataType].exclude.indexOf(elements[0].index);
+            let dataPoint = evt.chart.data.datasets[0].data[elements[0].index];
+            let excludeIndex = tempExcluded[dataType].exclude.findIndex(e => (e === dataPoint.x));
             
             if(excludeIndex === -1) {
-                tempExcluded[dataType].exclude.push(elements[0].index);
+                tempExcluded[dataType].exclude.push(dataPoint.x);
             } else {
                 tempExcluded[dataType].exclude.splice(excludeIndex, 1);
             }            

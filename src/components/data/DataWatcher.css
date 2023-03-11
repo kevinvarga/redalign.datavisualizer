@@ -1,10 +1,19 @@
 .watcher-icon {
-    color:white;
     font-size: xx-large;
 }
 
-.watcher-auto-save {
-    display: inline-block;
+.watcher-icon-enabled {
     color:white;
-    min-width: 45px;
+}
+
+.watcher-icon-disabled {
+    color:gray;
+}
+
+.watcher-auto-save {
+    padding-left: 3px;
+}
+
+.viewing-scan {
+    color:white;
 }

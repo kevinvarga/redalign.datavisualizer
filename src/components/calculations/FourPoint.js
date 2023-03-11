@@ -23,12 +23,28 @@ export default class FourPoint {
         }
     }
     
-
     calculate = () => {
-        let pump1 = this.laserData.allValues[this.laserData.rangeY.pump[this.points.pump.start].index]; // this.laserData.allValues[this.laserData.rangeY.pump[0].index];
-        let pump2 = this.laserData.allValues[this.laserData.rangeY.pump[this.points.pump.end].index]; // this.laserData.allValues[this.laserData.rangeY.pump[this.laserData.rangeY.pump.length - 1].index];
-        let motor1 = this.laserData.allValues[this.laserData.rangeY.motor[this.points.motor.start].index]; // this.laserData.allValues[this.laserData.rangeY.motor[0].index];
-        let motor2 = this.laserData.allValues[this.laserData.rangeY.motor[this.points.motor.end].index]; // this.laserData.allValues[this.laserData.rangeY.motor[this.laserData.rangeY.motor.length - 1].index];
+        let pumpStartIndex = this.laserData.rangeY.pump.findIndex(p => (p.x === this.points.pump.start));
+        if(pumpStartIndex === -1) {
+            pumpStartIndex = 0;
+        }
+        let pumpEndIndex = this.laserData.rangeY.pump.findIndex(p => (p.x === this.points.pump.end));
+        if(pumpEndIndex === -1) {
+            pumpEndIndex = this.laserData.rangeY.pump.length - 1;
+        }
+        let motorStartIndex = this.laserData.rangeY.motor.findIndex(m => (m.x === this.points.motor.start));
+        if(motorStartIndex === -1) {
+            motorStartIndex = 0;
+        }
+        let motorEndIndex = this.laserData.rangeY.motor.findIndex(m => (m.x === this.points.motor.end));
+        if(motorEndIndex === -1) {
+            motorEndIndex = this.laserData.rangeY.motor.length -1;
+        }
+
+        let pump1 = this.laserData.allValues[this.laserData.rangeY.pump[pumpStartIndex].index]; 
+        let pump2 = this.laserData.allValues[this.laserData.rangeY.pump[pumpEndIndex].index];
+        let motor1 = this.laserData.allValues[this.laserData.rangeY.motor[motorStartIndex].index]; 
+        let motor2 = this.laserData.allValues[this.laserData.rangeY.motor[motorEndIndex].index]; 
 
         let pPitch = this.calcSlope(pump1.x, pump1.y, pump2.x, pump2.y);
         let pYaw = this.calcSlope(pump1.x, pump1.z, pump2.x, pump2.z);

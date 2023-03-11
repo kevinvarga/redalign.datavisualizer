@@ -33,21 +33,7 @@ export default function FourPointCard(props) {
         if(laserData.algorithm.fourpoint) {
             fp = laserData.algorithm.fourpoint;
         } else {
-            let points = {
-                pump: {
-                    start: 0,
-                    end: laserData.rangeY.pump.length - 1,
-                },
-                motor: {
-                    start: 0,
-                    end: laserData.rangeY.motor.length - 1,
-                },
-                edit: {
-                    pump: "start",
-                    motor: "start"
-                }
-            }
-            dispatch(setAlgorithmValues({algorithm:"fourpoint", values:points}));
+            dispatch(setAlgorithmValues({algorithm:"fourpoint"}));
         }
     
         if(!fp){

@@ -1,18 +1,21 @@
-import { faDraftingCompass } from "@fortawesome/free-solid-svg-icons";
+import { faCloud, faCloudArrowUp, faDraftingCompass } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Badge, Button } from "@mui/material";
+import { Badge, Button, Chip } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import AutoSave from "../../AutoSave";
 import api from "../../common/api";
+import { formatDate } from "../../common/common";
 import { loadScans, showScans } from "../../reducer/Scans";
 import ScanSelector from "../ScanSelector";
 import "./DataWatcher.css";
 
 export default function DataWatcher(props) {
+    const laserData = useSelector((state) => state.laserData);
     const scans = useSelector((state) => state.scans);
     const {onDownloaded, onDataAvailable} = props;    
     const [loading, setLoading] = useState(true);
+    const [autoSave, setAutoSave] = useState(false);
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -64,7 +67,6 @@ export default function DataWatcher(props) {
 
         new api().request(`/measuringresult/${id}`)
         .then(data => {
-            console.log(data);
             if(onDownloaded) {
                 onDownloaded(id, data);
             }
@@ -85,32 +87,52 @@ export default function DataWatcher(props) {
         return count;
     }
 
+    const handleAutoSave = (saving) => {
+        setAutoSave(saving);
+    }
+
+    const renderScanDate = () => {
+        if(laserData.endDate !== null) {
+            return (<Chip 
+                        label={formatDate(laserData.endDate)}  
+                        variant="outlined" 
+                        sx={{color:"white", marginTop: "-10px"}}
+                        icon={(<span className="watcher-auto-save"> {(autoSave) ? (<FontAwesomeIcon icon={faCloudArrowUp} style={{color:"white",fontSize: "large"}} />) : (<FontAwesomeIcon icon={faCloud} style={{color:"#4caf50",fontSize: "large"}} />)} </span>) }
+                    />)
+        }
+    }
+
     const renderButton = () => {
         let count = countNewScans();
         return (
             <>
                 <Button
                     onClick={handleLoadClick}
+                    disabled={autoSave}
                 >
                     <Badge badgeContent={count} color="primary" >
-                        <FontAwesomeIcon icon={faDraftingCompass} className="watcher-icon" />     
+                        <FontAwesomeIcon icon={faDraftingCompass} className={"watcher-icon " + (autoSave ? "watcher-icon-disabled" : "watcher-icon-enabled")} />     
                     </Badge>
                 </Button>
                 <ScanSelector onSelected={handleSelected} />
-                <AutoSave />
+                <AutoSave
+                    onSaving={handleAutoSave} 
+                />
+                {renderScanDate()}
             </>
         )
     }
 
     return (
         <div>
-            {(loading) ? 
-            (<span>loading...</span>):
-            (scans.measurements.length === 0) ?
-            (<span>no measurements available...</span>):
-            (
-                renderButton()
-            )
+            {
+                (loading) ? 
+                (<span>loading...</span>):
+                (scans.measurements.length === 0) ?
+                (<span>no measurements available...</span>):
+                (
+                    renderButton()
+                )
             }
         </div>
     );

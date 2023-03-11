@@ -33,15 +33,7 @@ export default function BestFitLineCard(props){
         if(laserData.algorithm.bestfitline) {
             bfl = laserData.algorithm.bestfitline;
         } else {
-            let points = {
-                pump: {
-                    exclude: []
-                },
-                motor: {
-                    exclude: []
-                }
-            }
-            dispatch(setAlgorithmValues({algorithm:"bestfitline", values:points}));
+            dispatch(setAlgorithmValues({algorithm:"bestfitline"}));
         }
 
         if(!bfl){

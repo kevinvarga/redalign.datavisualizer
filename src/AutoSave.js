@@ -1,5 +1,3 @@
-import { faCloudArrowUp } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useState } from "react";
 import api, { REQUEST_METHOD } from './common/api';
 import store from './store';
@@ -17,8 +15,12 @@ const handleSubscribe = () => {
   if(id !== previousId) {
     previousId = id;
     previousState = undefined;
+    saving = false;
+    clearTimeout(uploadTimeout);
   } else {
-      if (previousState !== currentState) {
+      // only save when currentState exists
+      if (currentState && (previousState !== currentState)) {
+        previousId = id;
         previousState = currentState;
 
         if(Object.keys(previousState).length > 0) {
@@ -26,15 +28,12 @@ const handleSubscribe = () => {
             clearTimeout(uploadTimeout);
             uploadTimeout = setTimeout(() => {
                 saving = false;
-                console.log(`upload results - id: ${id}`);
-                let range = {
-                    pump: {start: ld.rangeY.pump[0].index, end: ld.rangeY.pump[ld.rangeY.pump.length - 1].index},
-                    motor: {start: ld.rangeY.motor[0].index, end: ld.rangeY.motor[ld.rangeY.motor.length - 1].index}
-                }; 
+                console.log(`upload results - id: ${previousId}`);
     
-                new api().request(`/measuringresult/${id}`, null, REQUEST_METHOD.PUT, {
+                new api().request(`/measuringresult/${previousId}`, null, REQUEST_METHOD.PUT, {
                     algorithm: JSON.stringify(previousState),
-                    range: JSON.stringify(range),
+                    ranges: JSON.stringify(ld.ranges),
+                    noiseReduction: JSON.stringify(ld.noiseReduction),
                 })
                 .then(() => {
                     console.log("updated scan");
@@ -48,10 +47,10 @@ const handleSubscribe = () => {
   }
 }
 
-// TODO: uncomment to enable uploading results
 store.subscribe(handleSubscribe); 
 
-export default function AutoSave() {
+export default function AutoSave(props) {
+    let {onSaving} = props;
     let [isSaving, setIsSaving] = useState(saving);
 
     useEffect(() => {
@@ -63,14 +62,9 @@ export default function AutoSave() {
         return () => clearInterval(interval);
     })
 
-    if(isSaving) {
-        return (<span className="watcher-auto-save">
-            <FontAwesomeIcon icon={faCloudArrowUp}  /> 
-        </span>
-        );
-    } else {
-        return (
-            <span className="watcher-auto-save"><label >&nbsp;</label></span>
-        );
+    if(onSaving) {
+        onSaving(isSaving);
     }
+
+    return (<></>)
 }

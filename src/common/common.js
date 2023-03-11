@@ -20,3 +20,27 @@ export const pad = (num, size) => {
   while (num.length < size) num = "0" + num;
   return num;
 }
+
+export const hashCode = (str) => {
+  let hash = 0;
+  for (let i = 0, len = str.length; i < len; i++) {
+      let chr = str.charCodeAt(i);
+      hash = (hash << 5) - hash + chr;
+      hash |= 0; // Convert to 32bit integer
+  }
+  return hash;
+}
+
+export const formatDate = (date) => {
+  let scanDate = new Date(date);
+  let hours = scanDate.getHours();
+  let amPM = "AM";
+  
+  if(hours === 0) {
+      hours = 12;
+  } else if((hours - 12) > 0) {
+      hours -= 12; 
+      amPM = "PM";
+  } 
+  return `${scanDate.getMonth() + 1}/${scanDate.getDate()} @ ${hours}:${pad(scanDate.getMinutes(), 2)} ${amPM}`;
+}

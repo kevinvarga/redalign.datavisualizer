@@ -7,6 +7,7 @@ import DataVisualizer from './components/graphs/DataVisualizer';
 import { setDataRange } from './reducer/LaserDataSlice';
 import './App.css';
 import BestFitLineCard from './components/cards/BestFitLineCard';
+import NoiseReduction from './components/NoiseReduction';
 
 function App() {
   const [reset, setReset] = useState(false);
@@ -56,6 +57,10 @@ function App() {
             
           >
             <Box sx={{width:"50vw", minWidth: "50vw"}}>
+              <NoiseReduction 
+                laserData={laserData} 
+                loading={loading} 
+              />
               <DataVisualizer
                 laserData={laserData}
                 reset={reset}

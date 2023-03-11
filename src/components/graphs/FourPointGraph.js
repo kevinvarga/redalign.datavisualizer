@@ -35,12 +35,12 @@ export default function FourPointGraph(props) {
     const isSelectedPoint = (ctx) => {
         const index = ctx.dataIndex;
         const dataType = ctx.chart.canvas.dataset.type;
-        
-        if(points) {
+        const dataPoint = ctx.chart.data.datasets[0].data[index];
+        if(points && dataPoint) {
             if(dataType === "pump") {
-                return (index === points.pump.start) || (index === points.pump.end);    
+                return (dataPoint.x === points.pump.start) || (dataPoint.x === points.pump.end);    
             } else {
-                return (index === points.motor.start) || (index === points.motor.end);
+                return (dataPoint.x === points.motor.start) || (dataPoint.x === points.motor.end);
             }
         } else {
             return false;
@@ -63,9 +63,10 @@ export default function FourPointGraph(props) {
         let elements = evt.chart.getActiveElements();
         if(points && elements.length > 0) {
             const dataType = evt.chart.canvas.dataset.type;
+            let dataPoint = evt.chart.data.datasets[0].data[elements[0].index];
             let editPoint = (dataType === "pump") ? points.edit.pump : points.edit.motor;
             let tempPoints = JSON.parse(JSON.stringify(points));
-            tempPoints[dataType][editPoint] = elements[0].index;
+            tempPoints[dataType][editPoint] = dataPoint.x;
             dispatch(setAlgorithmValues({algorithm:"fourpoint", values: tempPoints }));
         }
     }
