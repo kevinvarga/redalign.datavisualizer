@@ -80,6 +80,7 @@ export const LaserDataSlice = createSlice({
                 tempState.ZValues.push({x:data.x,y:data.z,radius:data.radius, index: i});
                 tempState.RadiusValues.push({x:data.x,y:data.radius,radius:data.radius, index:i});
 
+                /*
                 tempState.minXYZ.x = (tempState.minXYZ.x === 0) ? data.x : tempState.minXYZ.x;
                 tempState.minXYZ.y = (tempState.minXYZ.y > data.y) ? data.y : tempState.minXYZ.y;
                 tempState.minXYZ.z = (tempState.minXYZ.z > data.z) ? data.z : tempState.minXYZ.z;
@@ -89,6 +90,7 @@ export const LaserDataSlice = createSlice({
                 tempState.maxXYZ.y = (tempState.maxXYZ.y < data.y ) ? data.y : tempState.maxXYZ.y;
                 tempState.maxXYZ.z = (tempState.maxXYZ.z < data.z ) ? data.z : tempState.maxXYZ.z;
                 tempState.minXYZ.radius = (tempState.minXYZ.radius < data.radius) ? data.radius : tempState.minXYZ.radius;
+                */
             }
 
             if(action.payload.state && action.payload.state.algorithm) {
@@ -267,10 +269,10 @@ const applyNoiseReduction = (data, filter) => {
   
           if(keep && (i+1 < data.length)) {
               keep = (Math.abs(data[i+1].y - data[i].y) < tolerance) &&
-                      (Math.abs(data[i-1].z - data[i].z) < tolerance);
+                      (Math.abs(data[i+1].z - data[i].z) < tolerance);
   
               if(keep && filter.includeRadius){
-                keep = (Math.abs(data[i-1].radius - data[i].radius) < tolerance);
+                keep = (Math.abs(data[i+1].radius - data[i].radius) < tolerance);
               }
           }
   
