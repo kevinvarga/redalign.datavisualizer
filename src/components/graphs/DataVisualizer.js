@@ -66,8 +66,6 @@ export default function DataVisualizer(props) {
             <Box className="chart-container" >
                 <ScatterGraph
                     data={[laserData.rangeY.pump,laserData.rangeY.motor, laserData.YValues]}
-                    min={{x:laserData.minXYZ.x, y:laserData.minXYZ.y}}
-                    max={{x:laserData.maxXYZ.x, y:laserData.maxXYZ.y}}
                     reset={reset}
                     content={
                     <canvas 
@@ -81,8 +79,6 @@ export default function DataVisualizer(props) {
             <Box className="chart-container" >
                 <ScatterGraph
                         data={[laserData.rangeZ.pump,laserData.rangeZ.motor, laserData.ZValues]}
-                        min={{x:laserData.minXYZ.x, y:laserData.minXYZ.z}}
-                        max={{x:laserData.maxXYZ.x, y:laserData.maxXYZ.z}}
                         reset={reset}
                         content={
                         <canvas 
@@ -96,3 +92,11 @@ export default function DataVisualizer(props) {
         </Box>
     );
 }
+
+// vertical
+// min={{x:laserData.minXYZ.x, y:laserData.minXYZ.y}}
+// max={{x:laserData.maxXYZ.x, y:laserData.maxXYZ.y}}
+
+// horizontal 
+//min={{x:laserData.minXYZ.x, y:laserData.minXYZ.z}}
+//max={{x:laserData.maxXYZ.x, y:laserData.maxXYZ.z}}
